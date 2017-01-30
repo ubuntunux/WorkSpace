@@ -32,10 +32,14 @@
 .idea
 .ropeproject
 .settings
-.kivy
 *.log
 *.pyc
 *.pyo
 *.swp
 *.hi
 *.*~
+
+# kivy
+.kivy
+kivy_log.txt
+resources_log.txt
