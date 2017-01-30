@@ -3,6 +3,9 @@
 *.lo
 *.o
 *.obj
+Debug
+Release
+RelWithDebug
 
 # Precompiled Headers
 *.gch
