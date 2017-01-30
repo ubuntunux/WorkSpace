@@ -1,0 +1,116 @@
+#:kivy 1.0
+#:import win kivy.core.window
+#:import random random
+
+<Grid>:
+    canvas:
+        Color:
+            rgba: self.color_right
+        Line:
+            points: self.down_right
+        Line:
+            points: self.top_right
+        Line:
+            points: self.right_down
+        Line:
+            points: self.right_top
+        Color:
+            rgba: self.color_left
+        Line:
+            points: self.down_left
+        Line:
+            points: self.top_left
+        Line:
+            points: self.left_down
+        Line:
+            points: self.left_top
+        Color:
+            rgba: self.color
+        Line:
+            points: self.middle
+        Ellipse:
+            pos: -self.radius, self.radius
+            size: self.radius * 2, self.radius * 2
+            angle_start: 0
+            angle_end: 180
+        Color:
+            rgba: self.background_color
+        Ellipse:
+            pos: -self.radius * .95, self.radius / 0.95
+            size: self.radius * 1.9, self.radius * 1.9
+            angle_start: 0
+            angle_end: 180
+        Color:
+            rgba: self.color
+        Ellipse:
+            pos: win.Window.width - self.radius, self.radius
+            size: self.radius * 2, self.radius * 2
+            angle_start: 0
+            angle_end: -180
+        Color:
+            rgba: self.background_color
+        Ellipse:
+            pos: win.Window.width - self.radius * .95, self.radius / .95
+            size: self.radius * 1.9, self.radius * 1.9
+            angle_start: 0
+            angle_end: -180
+        Color:
+            rgba: self.color
+        Ellipse:
+            pos: win.Window.width * 0.5 - self.radius, win.Window.height * 0.5 - self.radius
+            size: self.radius * 2, self.radius * 2
+        Color:
+            rgba: self.background_color
+        Ellipse:
+            pos: win.Window.width * 0.5 - self.radius * .95, win.Window.height * 0.5 - self.radius * .95
+            size: self.radius * 1.9, self.radius * 1.9
+
+<Puck>:
+    canvas:
+        Color:
+            hsv: random.random(), 1, 1
+        Ellipse:
+            pos: self.x - self.radius, self.y - self.radius
+            size: self.radius * 2, self.radius * 2
+
+<Ball>:
+    canvas:
+        Color:
+            hsv: self.color
+        Ellipse:
+            pos: self.x - self.radius, self.y - self.radius
+            size: self.radius * 2, self.radius * 2
+
+<Game>:
+    ball: air_hockey_ball
+    player1: player_right
+    player2: player_left
+    
+    Label:
+        font_size: 60
+        center_x: root.width / 4
+        top: root.top
+        text: str(root.player1.score)
+        
+    Label:
+        font_size: 60
+        center_x: root.width * 3 / 4
+        top: root.top
+        text: str(root.player2.score)
+
+    Ball:
+        id: air_hockey_ball
+        state: 'right'
+        pos: win.Window.width * .5 - win.Window.height * .25, win.Window.height * .5
+
+    Puck:
+        id: player_right
+        state: 'right'
+        pos: win.Window.width * .5 - win.Window.height * .5, win.Window.height * .5
+        on_touch_up: root.update_trajectory
+
+    Puck:
+        id: player_left
+        state: 'left'
+        pos: win.Window.width * .5 + win.Window.height * .5, win.Window.height * .5
+        on_touch_up: root.update_trajectory()

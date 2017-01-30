@@ -1,0 +1,78 @@
+#:kivy 1.0.9
+
+
+<AimLine>:
+    canvas:
+        Color:
+            rgb: 1., .2, .2
+        Line:
+            points: [self.start_pt[0], self.start_pt[1], self.end_pt[0], self.end_pt[1]]
+            dash_length: 1.
+            dash_offset: 4.
+
+
+<BlackHole>:
+    canvas:
+        Color:
+            rgb: 0., 0., 0.
+        Ellipse:
+            pos: (self.x - self.r, self.y - self.r)
+            size: (self.r * 2., self.r * 2.)
+
+
+
+<GoalPoint>:
+    canvas:
+        Color:
+            rgba: 0., .9, .9, .8
+        Ellipse:
+            pos: (self.x - self.r, self.y - self.r)
+            size: (self.r * 2., self.r * 2.)
+
+
+<MainMenu>:
+    orientation: 'vertical'
+    spacing: 20
+    height: len(self.children) * 70.
+
+
+<Rocket>:
+    canvas:
+        Color:
+            rgb: .7, .7, .7
+        Quad:
+            points: self.quad_points
+
+
+<Shot>:
+    canvas:
+        Color:
+            rgb: .8, .5, .5
+        Ellipse:
+            pos: (self.x - self.r, self.y - self.r)
+            size: (self.r * 2., self.r * 2.)
+
+
+<Stars>:
+    canvas:
+        Color:
+            rgb: 1., 1., 1.
+        Point:
+            points: self.points[0]
+            pointsize: .3
+        Point:
+            points: self.points[1]
+            pointsize: .6
+        Point:
+            points: self.points[2]
+            pointsize: 1
+
+
+<Wall>:
+    canvas:
+        Color:
+            rgb: 1., 1., 1.
+        Quad:
+            points: self.quad_points
+
+

@@ -1,0 +1,3 @@
+title=Game_translation
+author=Game
+orientation=landscape

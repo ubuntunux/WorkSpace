@@ -1,0 +1,3 @@
+Run game.py to play the game. Requires Python 2.x and Pygame 1.9.1 to be installed.
+
+To run the level editor in Ubuntu, run this command: sudo apt-get mono-winforms* and then run the .exe file with mono <file>. Make sure mono is installed! 

@@ -1,0 +1,3 @@
+title=kvrun_logo
+author= kivytest
+orientation=portrait

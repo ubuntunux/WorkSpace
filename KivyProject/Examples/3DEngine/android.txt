@@ -1,0 +1,3 @@
+title=kivy3
+author= kivytest
+orientation=landscape

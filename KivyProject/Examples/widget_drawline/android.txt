@@ -1,0 +1,3 @@
+title=widget_drawline
+author= kivytest
+orientation=portrait

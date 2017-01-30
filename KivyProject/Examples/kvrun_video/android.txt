@@ -1,0 +1,3 @@
+title=kvrun_video
+author= kivytest
+orientation=portrait

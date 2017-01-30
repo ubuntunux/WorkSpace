@@ -1,0 +1,3 @@
+title=echoclient
+author= kivytest
+orientation=portrait

@@ -1,0 +1,162 @@
+#: import globals globals
+
+<Toolbar>:
+    layout: box_layout.__self__
+    cover_layout: float_layout.__self__
+    btn_pen: button_pen.__self__
+    btn_eraser: button_eraser.__self__
+    tool_menu: tool_bubble.__self__
+    tool_menu_pen: tool_bubble_pen.__self__
+    tool_menu_eraser: tool_bubble_eraser.__self__
+    btn_figs: button_figs.__self__
+    BoxLayout:
+        id: box_layout
+        padding: (1, 1, 1, 1)
+        spacing: 1
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 1
+            #padding: (1, 1, 1, 1)
+            MenuButton:
+                id: button_eraser
+                tool: 'erase'
+                group: 'tools'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('eraser_1.png')
+                background_down: globals.data_path('eraser_1_down.png')
+                on_press: root.tools_on_button_press(self)
+                canvas:
+                    Color:
+                        rgba: 0.25, 0.25, 0.25,  1
+                    Mesh:
+                        vertices: (self.x+self.width/2,self.y+3,0,0,self.x+self.width-3,self.y+3,0,0,self.x+self.width-3,self.y+self.height/2,0,0)
+                        indices: (0,1,2)
+                        mode: 'triangle_fan'
+            ToolToggleButton:
+                tool: 'fill'
+                group: 'tools'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('buck.png')
+                background_down: globals.data_path('buck_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolToggleButton:
+                tool: 'select'
+                group: 'tools'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('select.png')
+                background_down: globals.data_path('select_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolButton:
+                tool: 'zoomx1'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('zoom_1-1.png')
+                background_down: globals.data_path('zoom_1-1_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolButton:
+                tool: 'zoomin'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('zoom_in.png')
+                background_down: globals.data_path('zoom_in_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolButton:
+                tool: 'undo'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('undo.png')
+                background_down: globals.data_path('undo_down.png')
+                on_press: root.tools_on_button_press(self)
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 1
+            MenuButton:
+                id: button_pen
+                tool: 'pencil'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('pencil_1.png')
+                background_down: globals.data_path('pencil_1_down.png')
+                group: 'tools'
+                on_press: root.tools_on_button_press(self)
+                canvas:
+                    Color:
+                        rgba: 0.25, 0.25, 0.25,  1
+                    Mesh:
+                        vertices: (self.x+self.width/2,self.y+3,0,0,self.x+self.width-3,self.y+3,0,0,self.x+self.width-3,self.y+self.height/2,0,0)
+                        indices: (0,1,2)
+                        mode: 'triangle_fan'
+            MenuButton:
+                id: button_figs
+                tool: 'figures'
+                group: 'tools'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('line.png')
+                background_down: globals.data_path('line_down.png')
+                on_press: root.tools_on_button_press(self)
+                canvas:
+                    Color:
+                        rgba: 0.25, 0.25, 0.25,  1
+                    Mesh:
+                        vertices: (self.x+self.width/2,self.y+3,0,0,self.x+self.width-3,self.y+3,0,0,self.x+self.width-3,self.y+self.height/2,0,0)
+                        indices: (0,1,2)
+                        mode: 'triangle_fan'
+            ToolToggleButton:
+                tool: 'picker'
+                group: 'tools'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('picker.png')
+                background_down: globals.data_path('picker_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolToggleButton:
+                tool: 'move'
+                group: 'tools'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('move.png')
+                background_down: globals.data_path('move_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolButton:
+                tool: 'zoomout'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('zoom_out.png')
+                background_down: globals.data_path('zoom_out_down.png')
+                on_press: root.tools_on_button_press(self)
+            ToolButton:
+                tool: 'redo'
+                border: [0, 0, 0, 0]
+                background_normal: globals.data_path('redo.png')
+                background_down: globals.data_path('redo_down.png')
+                on_press: root.tools_on_button_press(self)
+    ToolBubble:
+        toolbar: root
+        id: tool_bubble
+        height: button_figs.height
+        width: self.height*3
+        y: button_figs.y
+        x: button_figs.right
+        arrow_pos: 'left_mid'
+        orientation: 'horizontal'
+        _parent: root
+    ToolBubble:
+        toolbar: root
+        id: tool_bubble_pen
+        height: button_pen.height
+        width: self.height*3
+        y: button_pen.y
+        x: button_pen.right
+        arrow_pos: 'left_mid'
+        orientation: 'horizontal'
+        _parent: root
+    ToolBubble:
+        toolbar: root
+        id: tool_bubble_eraser
+        height: button_eraser.height
+        width: self.height*3
+        y: button_eraser.y
+        x: button_eraser.right
+        arrow_pos: 'left_mid'
+        orientation: 'horizontal'
+        _parent: root
+    FloatLayout:
+        id: float_layout
+        pos: (0, 0)
+        size: root.size
+
+

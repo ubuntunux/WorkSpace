@@ -1,0 +1,3 @@
+title=TouchTouch
+author=EnuriSoft
+orientation=landscape

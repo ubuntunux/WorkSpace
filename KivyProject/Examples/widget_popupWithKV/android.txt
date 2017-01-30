@@ -1,0 +1,3 @@
+title=widget_PopupWIthKV
+author= kivytest
+orientation=portrait

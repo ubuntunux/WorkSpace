@@ -1,0 +1,3 @@
+title=kvrun_stencil
+author= kivytest
+orientation=portrait

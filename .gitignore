@@ -27,3 +27,15 @@
 *.exe
 *.out
 *.app
+
+# Python
+.idea
+.ropeproject
+.settings
+.kivy
+*.log
+*.pyc
+*.pyo
+*.swp
+*.hi
+*.*~

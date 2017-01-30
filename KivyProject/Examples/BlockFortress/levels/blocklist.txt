@@ -1,0 +1,15 @@
+// Definitions of which image files the symbols or numbers in level files are associated to.
+// Negative values (say -8) are defined to be invisible blocks that, when hit the first time, transforms into a block of type abs(x) - 1. For -8 that gives us a red block with 7 HP.
+*="images/blocks/invulnerable.png"
+1="images/blocks/lightblue.png"
+2="images/blocks/babyblue.png"
+3="images/blocks/blue.png"
+4="images/blocks/pink.png"
+5="images/blocks/purple.png"
+6="images/blocks/orange.png"
+7="images/blocks/red.png"
+8="images/blocks/lightgreen.png"
+9="images/blocks/green.png"
+10="images/blocks/yellow.png"
+
+

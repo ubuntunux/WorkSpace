@@ -1,0 +1,3 @@
+title=widget_drawellipse
+author= kivytest
+orientation=portrait

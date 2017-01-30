@@ -1,0 +1,3 @@
+title=twist
+author= kivytest
+orientation=portrait

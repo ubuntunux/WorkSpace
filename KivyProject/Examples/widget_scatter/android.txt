@@ -1,0 +1,3 @@
+title=widget_scatter
+author= kivytest
+orientation=portrait

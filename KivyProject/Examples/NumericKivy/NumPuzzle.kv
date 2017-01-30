@@ -1,0 +1,57 @@
+#:kivy 1.0.9
+#:import kivy kivy
+#:import win kivy.core.window
+
+<NumPuzzleGame>:
+    numericWidget: numericWidget
+    labelText: labelText
+    kvW: root.size[0] * 0.1
+    kvH: root.size[1] * 0.1
+    canvas:
+        Color:
+            rgb: .2,.2,.2
+        Rectangle:
+            size: self.size
+        Color:
+            rgb: 0,0,0
+        Rectangle:
+            pos: (self.size[0]*0.075, self.size[1]*0.075)
+            size: (self.size[0]*0.85, self.size[1]*0.65)
+    Button:
+        text: 'Beginner'
+        size: (root.kvW * 2.5, root.kvH)
+        pos: 0, root.height - root.kvH
+        on_release: root.setReset(0)
+    Button:
+        text: 'Intermediate'
+        size: (root.kvW * 2.5, root.kvH)
+        pos: root.kvW * 2.5, root.height - root.kvH
+        on_release: root.setReset(1)
+    Button:
+        text: 'Advanced'
+        size: (root.kvW * 2.5, root.kvH)
+        pos: root.kvW * 5, root.height - root.kvH
+        on_release: root.setReset(2)
+    Button:
+        text: 'Expert'
+        size: (root.kvW * 2.5, root.kvH)
+        pos: root.kvW * 7.5, root.height - root.kvH
+        on_release: root.setReset(3)
+    Label:
+        id:labelText
+        text: ""
+        halign: 'left'
+        valign: 'middle'
+        size: (root.kvW * 10, root.kvH)
+        pos: .0, root.height - root.kvH * 2.5
+        color: 1,1,1,1
+        font_size: 35
+        text_size: self.size
+    Scatter:
+        id: numericWidget
+        size: root.kvW * 8, root.kvH * 6
+        pos: root.kvW, root.kvH * 1
+        do_translation: False
+        do_rotation: False
+        do_scale: False
+<NumPuzzleRoot>:

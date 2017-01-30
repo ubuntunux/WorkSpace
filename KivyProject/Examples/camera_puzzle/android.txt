@@ -1,0 +1,3 @@
+title=Camera Puzzle
+author=Kivy team
+orientation=landscape

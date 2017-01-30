@@ -1,0 +1,3 @@
+title=mesh
+author= kivytest
+orientation=portrait

@@ -1,0 +1,3 @@
+title=widget_randomcolor
+author= kivytest
+orientation=portrait

@@ -1,0 +1,3 @@
+title=NumericPuzzle
+author=EnuriSoft
+orientation=portrait

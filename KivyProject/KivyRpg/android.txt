@@ -1,0 +1,3 @@
+title=KivyRPG
+author=EnuriSoft
+orientation=landscape

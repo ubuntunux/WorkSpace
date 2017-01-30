@@ -1,0 +1,3 @@
+title=RevMob
+author= kivytest
+orientation=portrait

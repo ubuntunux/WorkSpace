@@ -1,0 +1,4 @@
+from collections import namedtuple
+actorProp = namedtuple("actor_prop", ["x","y"])
+schema = actorProp(x=1, y=2)
+print(schema._fields)

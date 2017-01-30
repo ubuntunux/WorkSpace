@@ -1,0 +1,3 @@
+title=Game_hockey
+author= kivytest
+orientation=landscape

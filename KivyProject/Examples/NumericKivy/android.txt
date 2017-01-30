@@ -1,0 +1,3 @@
+title=NumericKivy
+author=EnuriSoft
+orientation=portrait

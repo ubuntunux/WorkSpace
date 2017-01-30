@@ -1,0 +1,8 @@
+Inn
+Bakery
+Town Hall
+Castle
+House
+Weapon
+Guild
+Store

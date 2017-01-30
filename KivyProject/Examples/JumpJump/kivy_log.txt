@@ -1,0 +1,29 @@
+[WARNING           ] [Config      ] Older configuration version detected (10 instead of 13)
+[WARNING           ] [Config      ] Upgrading configuration in progress.
+[INFO              ] [Logger      ] Record log in /storage/emulated/0/kivy/JumpJump/.kivy/logs/kivy_15-04-22_0.txt
+[INFO              ] [Kivy        ] v1.9.0
+[INFO              ] [Python      ] v2.7.2 (default, Apr  2 2015, 13:52:41) 
+[GCC 4.8]
+[INFO              ] [Factory     ] 173 symbols loaded
+ /data/data/org.kivy.pygame/files/lib/python2.7/site-packages/kivy/core/image/img_pygame.py:13: RuntimeWarning: import cdrom: No module named cdrom
+ (ImportError: No module named cdrom)
+[INFO              ] [Image       ] Providers: img_tex, img_dds, img_gif, img_pygame, img_pil (img_ffpyplayer ignored)
+[INFO              ] [Window      ] Provider: pygame
+[INFO              ] [GL          ] OpenGL version <OpenGL ES 3.0 V@66.0 AU@  (CL@)>
+[INFO              ] [GL          ] OpenGL vendor <Qualcomm>
+[INFO              ] [GL          ] OpenGL renderer <Adreno (TM) 330>
+[INFO              ] [GL          ] OpenGL parsed version: 3, 0
+[INFO              ] [GL          ] Texture max size <4096>
+[INFO              ] [GL          ] Texture max units <16>
+[INFO              ] [Support     ] Android install hooks
+[INFO              ] [Window      ] virtual keyboard not allowed, single mode, not docked
+[INFO              ] [Audio       ] Providers: audio_pygame (audio_pygst, audio_ffpyplayer ignored)
+[INFO              ] [Text        ] Provider: pygame
+ Traceback (most recent call last):
+   File "main.py", line 4, in <module>
+     import MyGame
+   File "/storage/emulated/0/kivy/JumpJump/MyGame.py", line 4, in <module>
+     import Animal
+   File "/storage/emulated/0/kivy/JumpJump/Animal.py", line 20, in <module>
+     gGravity = Util.gGravity*0.8
+ AttributeError: 'module' object has no attribute 'gGravity'

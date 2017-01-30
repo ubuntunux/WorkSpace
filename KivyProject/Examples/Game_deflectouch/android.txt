@@ -1,0 +1,3 @@
+title=Game_deflectouch
+author=Cyril Stoller
+orientation=landscape

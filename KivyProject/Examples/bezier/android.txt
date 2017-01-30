@@ -1,0 +1,3 @@
+title=Bezier
+author= kivytest
+orientation=portrait

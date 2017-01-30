@@ -1,0 +1,3 @@
+title=BlockFortress
+author= kivytest
+orientation=landscape

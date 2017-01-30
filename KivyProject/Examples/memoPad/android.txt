@@ -1,0 +1,4 @@
+title=memopad
+author=Kivy team
+orientation=portrait
+fullscreen=1

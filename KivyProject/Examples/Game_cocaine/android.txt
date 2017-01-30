@@ -1,0 +1,3 @@
+title=Game_cocaine
+author= kivytest
+orientation=portrait

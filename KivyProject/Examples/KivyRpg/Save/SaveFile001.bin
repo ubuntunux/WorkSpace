@@ -1,0 +1,191 @@
+<?xml version="1.0" ?>
+<World count="123" height="1080.0" id="0" name="Kivy" pos="[960.0, 540.0]" rotation="0.0" width="1920.0">
+    <City id="1" name="Klemme" pos="[99.0, 137.99999999999994]" rotation="0.0">
+        <Road id="10" name="Finlayson" pos="[1403.2823920265782, 714.0]" rotation="0.0">
+            <Gate id="11" name="Franconia City Bowerston Road " pos="[1403.2823920265782, 714.0]" rotation="300.997368537"/>
+        </Road>
+    </City>
+    <City id="2" name="Bell Center" pos="[138.0, 735.00000000000011]" rotation="0.0">
+        <Road id="18" name="Weedpatch" pos="[1632.0, 362.17391304347802]" rotation="0.0">
+            <Gate id="19" name="Mount Wilson City Seneca Road " pos="[1632.0, 362.17391304347802]" rotation="267.924954483"/>
+        </Road>
+        <Road id="60" name="Northwood" pos="[860.68259385665533, 66.0]" rotation="0.0">
+            <Gate id="61" name="Luxora City Maquon Road " pos="[860.68259385665533, 66.0]" rotation="179.413411618"/>
+        </Road>
+    </City>
+    <City id="3" name="Lompoc" pos="[901.0, 283.0]" rotation="0.0">
+        <Road id="24" name="Cliff" pos="[808.60889929742382, 714.0]" rotation="0.0">
+            <Gate id="25" name="Mount Wilson City Ashtabula Road " pos="[808.60889929742382, 714.0]" rotation="9.70150825427"/>
+            <Gate id="35" name="Murraysville Road" pos="[1632.0, 258.98524842156701]" rotation="260.318963872"/>
+        </Road>
+        <Road id="30" name="Murraysville" pos="[1632.0, 573.53596287703056]" rotation="0.0">
+            <Gate id="31" name="Sweetser City Bosworth Road " pos="[1632.0, 573.53596287703056]" rotation="283.440398001"/>
+            <Gate id="34" name="Cliff Road" pos="[96.0, 521.01475157843299]" rotation="80.3190013195"/>
+        </Road>
+    </City>
+    <City id="4" name="Sweetser" pos="[1332.0, 386.00000000000017]" rotation="0.0">
+        <Town id="12" name="Bosworth" pos="[1106.0, 94.999999999999943]" rotation="0.0">
+            <Gate id="14" name="Bosworth Road" pos="[96.0, 474.75681238657478]" rotation="83.7023153394"/>
+        </Town>
+        <Road id="32" name="Bosworth" pos="[96.0, 206.46403712296944]" rotation="0.0">
+            <Gate id="33" name="Lompoc City Murraysville Road " pos="[96.0, 206.46403712296944]" rotation="103.440435449"/>
+            <Gate id="41" name="Akaska Road" pos="[1632.0, 661.91066970425504]" rotation="289.496512007"/>
+            <Gate id="13" name="Bosworth Town" pos="[1632.0, 305.24318761342516]" rotation="263.702277891"/>
+        </Road>
+        <Road id="38" name="Akaska" pos="[1529.5135135135151, 714.0]" rotation="0.0">
+            <Gate id="39" name="Westboro City Sweden Valley Road " pos="[1529.5135135135151, 714.0]" rotation="295.958755938"/>
+            <Gate id="40" name="Bosworth Road" pos="[96.0, 118.08933029574501]" rotation="109.496549455"/>
+        </Road>
+    </City>
+    <City id="5" name="Westboro" pos="[1636.0, 533.99999999999989]" rotation="0.0">
+        <Road id="36" name="Sweden Valley" pos="[198.48648648648498, 66.0]" rotation="0.0">
+            <Gate id="37" name="Sweetser City Akaska Road " pos="[198.48648648648498, 66.0]" rotation="115.958793386"/>
+            <Gate id="49" name="Ennis Road" pos="[1632.0, 390.0]" rotation="269.999981276"/>
+            <Gate id="77" name="Funkley Road" pos="[811.25296864932318, 714.0]" rotation="9.24660483892"/>
+        </Road>
+        <Road id="44" name="Ennis" pos="[770.07446808510633, 66.0]" rotation="0.0">
+            <Gate id="45" name="Chamberino City Jensen Road " pos="[770.07446808510633, 66.0]" rotation="163.833497677"/>
+            <Gate id="48" name="Sweden Valley Road" pos="[96.0, 390.0]" rotation="90.000018724"/>
+        </Road>
+        <Road id="72" name="Funkley" pos="[96.0, 695.52588555858301]" rotation="0.0">
+            <Gate id="73" name="Cogswell City Log Lane Road " pos="[96.0, 695.52588555858301]" rotation="68.3063540652"/>
+            <Gate id="76" name="Sweden Valley Road" pos="[916.74703135067682, 66.0]" rotation="189.246567391"/>
+        </Road>
+    </City>
+    <City id="6" name="Franconia" pos="[600.0, 438.99999999999989]" rotation="0.0">
+        <Dungeon id="80" name="Seneca" pos="[733.99999999999989, 107.99999999999997]" rotation="0.0">
+            <Gate id="91" name="Englewood Cliffs Dungeon" pos="[1632.0, 486.0]" rotation="277.124999107"/>
+        </Dungeon>
+        <Dungeon id="81" name="Englewood Cliffs" pos="[1134.0, 158.0]" rotation="0.0">
+            <Gate id="90" name="Seneca Dungeon" pos="[96.0, 294.0]" rotation="97.1250365552"/>
+            <Gate id="95" name="Pentwater Town" pos="[632.57142857142844, 714.0]" rotation="35.5376851854"/>
+            <Point id="135" name="" pos="[1377.0, 249.0]" rotation="0.0"/>
+            <Point id="136" name="" pos="[740.0, 90.000000000000028]" rotation="0.0"/>
+            <Point id="137" name="" pos="[1306.0, 440.0]" rotation="0.0"/>
+            <Point id="138" name="" pos="[315.0, 75.999999999999943]" rotation="0.0"/>
+        </Dungeon>
+        <Dungeon id="82" name="Allamuchy" pos="[1237.0, 497.0]" rotation="0.0">
+            <Gate id="97" name="Pentwater Town" pos="[96.0, 350.79279279279251]" rotation="92.922492"/>
+            <Gate id="98" name="Johnsonville Town" pos="[731.68586387434561, 714.0]" rotation="22.213977847"/>
+        </Dungeon>
+        <Town id="83" name="Klemme" pos="[449.0, 509.0]" rotation="0.0">
+            <Gate id="87" name="Strodes Mills Road" pos="[96.0, 141.87908251850556]" rotation="107.904324079"/>
+            <Gate id="88" name="Pentwater Town" pos="[1632.0, 341.05054945054928]" rotation="266.353094527"/>
+        </Town>
+        <Town id="84" name="Johnsonville" pos="[1159.0, 688.0]" rotation="0.0">
+            <Gate id="99" name="Allamuchy Dungeon" pos="[996.31413612565439, 66.0]" rotation="202.213940399"/>
+        </Town>
+        <Town id="85" name="Pentwater" pos="[904.0, 479.99999999999989]" rotation="0.0">
+            <Gate id="89" name="Klemme Town" pos="[96.0, 438.94945054945072]" rotation="86.3531319751"/>
+            <Gate id="94" name="Englewood Cliffs Dungeon" pos="[1095.4285714285716, 66.0]" rotation="215.537647737"/>
+            <Gate id="96" name="Allamuchy Dungeon" pos="[1632.0, 429.20720720720749]" rotation="272.922454552"/>
+            <Player id="15" name="Player" pos="(96.0, 438.94945054945072)" rotation="0.0">
+                <objectData>
+                    <pCurArriveObj value="89"/>
+                    <pStartFromObj value="-1"/>
+                    <pTargetObj value="-1"/>
+                    <pOldTargetObj value="-1"/>
+                </objectData>
+                <transformData>
+                    <bJump value="False"/>
+                    <fJump value="-572.956023216"/>
+                    <bMove value="False"/>
+                    <vStartPos value="(-285.40029957366573, 394.3421475025491)"/>
+                    <vTargetPos value="(96.0, 438.94945054945072)"/>
+                    <pPathList value="[]"/>
+                    <vMoveDir value="[0.99322994680642085, 0.11616485168463961]"/>
+                    <fMoveTime value="0.0"/>
+                    <fMoveTimeAcc value="0.0"/>
+                    <fFloorPos value="438.949450549"/>
+                </transformData>
+            </Player>
+        </Town>
+        <Road id="8" name="Bowerston" pos="[324.71760797342188, 66.0]" rotation="0.0">
+            <Gate id="9" name="Klemme City Finlayson Road " pos="[324.71760797342188, 66.0]" rotation="120.997405985"/>
+            <Gate id="79" name="Strodes Mills Road" pos="[638.72742071810546, 714.0]" rotation="34.81034561"/>
+        </Road>
+        <Road id="64" name="Strodes Mills" pos="[96.0, 394.95483870967763]" rotation="0.0">
+            <Gate id="65" name="Luxora City Risingsun Road " pos="[96.0, 394.95483870967763]" rotation="89.6303735852"/>
+            <Gate id="78" name="Bowerston Road" pos="[1089.2725792818944, 66.0]" rotation="214.810308162"/>
+            <Gate id="86" name="Klemme Town" pos="[1632.0, 638.12091748149442]" rotation="287.904286631"/>
+        </Road>
+    </City>
+    <City id="7" name="Mount Wilson" pos="[828.0, 709.99999999999989]" rotation="0.0">
+        <Road id="20" name="Seneca" pos="[96.0, 417.82608695652198]" rotation="0.0">
+            <Gate id="21" name="Bell Center City Weedpatch Road " pos="[96.0, 417.82608695652198]" rotation="87.9249919309"/>
+            <Gate id="29" name="Ashtabula Road" pos="[1622.2687200241712, 66.0]" rotation="246.863483319"/>
+        </Road>
+        <Road id="26" name="Ashtabula" pos="[919.39110070257618, 66.0]" rotation="0.0">
+            <Gate id="27" name="Lompoc City Cliff Road " pos="[919.39110070257618, 66.0]" rotation="189.701470806"/>
+            <Gate id="28" name="Seneca Road" pos="[105.73127997582867, 714.0]" rotation="66.8635207665"/>
+        </Road>
+    </City>
+    <City id="42" name="Chamberino" pos="[1527.0, 158.00000000000006]" rotation="0.0">
+        <Road id="46" name="Jensen" pos="[957.92553191489355, 714.0]" rotation="0.0">
+            <Gate id="47" name="Westboro City Ennis Road " pos="[957.92553191489355, 714.0]" rotation="343.833460229"/>
+            <Gate id="55" name="Niwot Road" pos="[157.36064691187869, 66.0]" rotation="114.631872042"/>
+        </Road>
+        <Road id="52" name="Niwot" pos="[96.0, 318.80000000000001]" rotation="0.0">
+            <Gate id="53" name="Hoffman Estates City White Bear Lake Road " pos="[96.0, 318.80000000000001]" rotation="95.2966760466"/>
+            <Gate id="54" name="Jensen Road" pos="[1570.6393530881214, 714.0]" rotation="294.631834594"/>
+        </Road>
+    </City>
+    <City id="43" name="Hoffman Estates" pos="[567.0, 69.000000000000057]" rotation="0.0">
+        <Road id="50" name="White Bear Lake" pos="[1632.0, 461.20000000000005]" rotation="0.0">
+            <Gate id="51" name="Chamberino City Niwot Road " pos="[1632.0, 461.20000000000005]" rotation="275.296638599"/>
+        </Road>
+    </City>
+    <City id="56" name="Cogswell" pos="[1269.0, 679.99999999999989]" rotation="0.0">
+        <Road id="74" name="Log Lane" pos="[1632.0, 84.47411444141693]" rotation="0.0">
+            <Gate id="75" name="Westboro City Funkley Road " pos="[1632.0, 84.47411444141693]" rotation="248.306316617"/>
+        </Road>
+    </City>
+    <City id="57" name="Luxora" pos="[135.0, 441.99999999999994]" rotation="0.0">
+        <Town id="100" name="Bowerston" pos="[204.0, 344.0]" rotation="0.0">
+            <Gate id="106" name="Abita Springs Town" pos="[908.22284122562678, 66.0]" rotation="187.772252099"/>
+            <Gate id="113" name="Niwot Town" pos="[1632.0, 433.4285714285711]" rotation="273.236475093"/>
+        </Town>
+        <Town id="101" name="Lakes of the North" pos="[1393.0, 610.0]" rotation="0.0">
+            <Gate id="120" name="Maquon Road" pos="[96.0, 541.93959422171724]" rotation="78.8092416695"/>
+            <Gate id="121" name="Risingsun Road" pos="[1208.2290925777213, 66.0]" rotation="226.733940121"/>
+        </Town>
+        <Town id="102" name="Niwot" pos="[540.0, 362.99999999999989]" rotation="0.0">
+            <Gate id="112" name="Garretson Town" pos="[774.31141868512123, 714.0]" rotation="15.4729755472"/>
+            <Gate id="114" name="Bowerston Town" pos="[96.0, 346.57142857142884]" rotation="93.2365125409"/>
+        </Town>
+        <Town id="103" name="Garretson" pos="[460.0, 652.00000000000011]" rotation="0.0">
+            <Building id="128" name="House" pos="[664.0, 220.00000000000006]" rotation="0.0">
+                <Door id="127" name="" pos="[864.0, 66.0]" rotation="0.0"/>
+            </Building>
+            <Building id="130" name="Castle" pos="[1096.0, 705.0]" rotation="0.0">
+                <Door id="129" name="" pos="[864.0, 66.0]" rotation="0.0"/>
+            </Building>
+            <Building id="132" name="Inn" pos="[201.0, 471.0]" rotation="0.0">
+                <Door id="131" name="" pos="[864.0, 66.0]" rotation="0.0"/>
+            </Building>
+            <Building id="134" name="Weapon" pos="[870.0, 580.00000000000011]" rotation="0.0">
+                <Door id="133" name="" pos="[864.0, 66.0]" rotation="0.0"/>
+            </Building>
+            <Point id="123" name="" pos="[519.0, 223.99999999999997]" rotation="0.0"/>
+            <Point id="124" name="" pos="[1132.0, 431.0]" rotation="0.0"/>
+            <Point id="125" name="" pos="[539.0, 478.99999999999989]" rotation="0.0"/>
+            <Point id="126" name="" pos="[874.00000000000011, 297.99999999999983]" rotation="0.0"/>
+            <Gate id="111" name="Niwot Town" pos="[953.68858131487877, 66.0]" rotation="195.472938099"/>
+            <Gate id="115" name="Maquon Road" pos="[1632.0, 506.90146132189284]" rotation="278.65485057"/>
+        </Town>
+        <Town id="104" name="Abita Springs" pos="[253.00000000000011, -15.000000000000085]" rotation="0.0">
+            <Gate id="105" name="Bowerston Town" pos="[819.77715877437322, 714.0]" rotation="7.77228954705"/>
+        </Town>
+        <Road id="58" name="Maquon" pos="[867.31740614334467, 714.0]" rotation="0.0">
+            <Gate id="59" name="Bell Center City Northwood Road " pos="[867.31740614334467, 714.0]" rotation="359.41337417"/>
+            <Gate id="116" name="Garretson Town" pos="[96.0, 273.09853867810722]" rotation="98.6548880181"/>
+            <Gate id="119" name="Lakes of the North Town" pos="[1632.0, 238.06040577828276]" rotation="258.809204222"/>
+        </Road>
+        <Road id="66" name="Risingsun" pos="[1632.0, 385.04516129032237]" rotation="0.0">
+            <Gate id="67" name="Franconia City Strodes Mills Road " pos="[1632.0, 385.04516129032237]" rotation="269.630336137"/>
+            <Gate id="122" name="Lakes of the North Town" pos="[519.7709074222787, 714.0]" rotation="46.7339775686"/>
+        </Road>
+    </City>
+    <Bridge data="{1: {6: [11, 9]}, 2: {57: [61, 59], 7: [19, 21]}, 3: {4: [31, 33], 7: [25, 27]}, 4: {3: [33, 31], 5: [39, 37]}, 5: {56: [73, 75], 42: [45, 47], 4: [37, 39]}, 6: {1: [9, 11], 57: [65, 67]}, 7: {2: [21, 19], 3: [27, 25]}, 8: {64: [79, 78]}, 9: {79: [-1, -1]}, 12: {32: [14, 13]}, 13: {41: [-1, -1]}, 20: {26: [29, 28]}, 21: {29: [-1, -1]}, 24: {30: [35, 34]}, 25: {35: [-1, -1]}, 26: {20: [28, 29]}, 27: {28: [-1, -1]}, 28: {27: [-1, -1]}, 29: {21: [-1, -1]}, 30: {24: [34, 35]}, 31: {34: [-1, -1]}, 32: {12: [13, 14], 38: [41, 40]}, 33: {41: [-1, -1]}, 34: {31: [-1, -1]}, 35: {25: [-1, -1]}, 36: {72: [77, 76], 44: [49, 48]}, 37: {49: [-1, -1], 77: [-1, -1]}, 38: {32: [40, 41]}, 39: {40: [-1, -1]}, 40: {39: [-1, -1]}, 41: {33: [-1, -1], 13: [-1, -1]}, 42: {43: [53, 51], 5: [47, 45]}, 43: {42: [51, 53]}, 44: {36: [48, 49]}, 45: {48: [-1, -1]}, 46: {52: [55, 54]}, 47: {55: [-1, -1]}, 48: {45: [-1, -1]}, 49: {37: [-1, -1]}, 52: {46: [54, 55]}, 53: {54: [-1, -1]}, 54: {53: [-1, -1]}, 55: {47: [-1, -1]}, 56: {5: [75, 73]}, 57: {2: [59, 61], 6: [67, 65]}, 58: {101: [119, 120], 103: [116, 115]}, 59: {116: [-1, -1], 119: [-1, -1]}, 64: {8: [78, 79], 83: [86, 87]}, 65: {78: [-1, -1]}, 66: {101: [122, 121]}, 67: {122: [-1, -1]}, 72: {36: [76, 77]}, 73: {76: [-1, -1]}, 76: {73: [-1, -1]}, 77: {37: [-1, -1]}, 78: {65: [-1, -1], 86: [-1, -1]}, 79: {9: [-1, -1]}, 80: {81: [91, 90]}, 81: {80: [90, 91], 85: [95, 94]}, 82: {84: [98, 99], 85: [97, 96]}, 83: {64: [87, 86], 85: [88, 89]}, 84: {82: [99, 98]}, 85: {81: [94, 95], 82: [96, 97], 83: [89, 88]}, 86: {78: [-1, -1]}, 87: {88: [-1, -1]}, 88: {87: [-1, -1]}, 89: {94: [-1, -1]}, 90: {138: [-1, -1], 95: [-1, -1]}, 94: {96: [-1, -1], 89: [-1, -1]}, 95: {90: [-1, -1]}, 96: {94: [-1, -1]}, 97: {98: [-1, -1]}, 98: {97: [-1, -1]}, 100: {104: [106, 105], 102: [113, 114]}, 101: {58: [120, 119], 66: [121, 122]}, 102: {100: [114, 113], 103: [112, 111]}, 103: {58: [115, 116], 102: [111, 112]}, 104: {100: [105, 106]}, 106: {113: [-1, -1]}, 111: {128: [-1, -1], 115: [-1, -1]}, 112: {114: [-1, -1]}, 113: {106: [-1, -1]}, 114: {112: [-1, -1]}, 115: {111: [-1, -1]}, 116: {59: [-1, -1]}, 119: {59: [-1, -1]}, 120: {121: [-1, -1]}, 121: {120: [-1, -1]}, 122: {67: [-1, -1]}, 123: {128: [-1, -1], 125: [-1, -1]}, 124: {130: [-1, -1], 126: [-1, -1]}, 125: {123: [-1, -1], 132: [-1, -1], 134: [-1, -1]}, 126: {124: [-1, -1]}, 128: {123: [-1, -1], 111: [-1, -1]}, 130: {124: [-1, -1], 134: [-1, -1]}, 132: {125: [-1, -1]}, 134: {130: [-1, -1], 125: [-1, -1]}, 136: {138: [-1, -1]}, 138: {136: [-1, -1], 90: [-1, -1]}}"/>
+    <PathMap data="{9: {79: 79}, 11: {}, 13: {33: 41, 41: 41}, 14: {}, 15: {}, 16: {69: 69, 15: 15}, 17: {9: 9}, 19: {}, 21: {29: 29}, 22: {19: 19}, 23: {13: 13, 63: 13}, 25: {35: 35}, 27: {28: 28}, 28: {27: 27}, 29: {21: 21}, 31: {34: 34}, 33: {41: 41, 13: 41}, 34: {31: 31}, 35: {25: 25}, 37: {49: 49, 77: 77}, 39: {40: 40}, 40: {39: 39}, 41: {33: 33, 13: 13}, 45: {48: 48}, 47: {55: 55}, 48: {45: 45}, 49: {37: 37, 77: 37}, 51: {}, 53: {54: 54}, 54: {53: 53}, 55: {47: 47}, 59: {116: 116, 119: 119}, 61: {}, 62: {61: 61}, 63: {13: 13, 23: 13}, 65: {78: 78, 86: 78}, 67: {122: 122}, 68: {65: 65}, 69: {16: 16, 15: 16}, 70: {67: 67}, 71: {59: 59, 116: 59}, 73: {76: 76}, 75: {}, 76: {73: 73}, 77: {49: 37, 37: 37}, 78: {65: 65, 86: 86}, 79: {9: 9}, 86: {65: 78, 78: 78}, 87: {88: 88}, 88: {87: 87}, 89: {96: 94, 94: 94}, 90: {136: 138, 138: 138, 95: 95}, 91: {}, 92: {91: 91}, 93: {96: 94, 89: 89, 94: 94}, 94: {96: 96, 89: 89}, 95: {136: 90, 90: 90, 138: 90}, 96: {89: 94, 94: 94}, 97: {98: 98}, 98: {97: 97}, 99: {}, 105: {}, 106: {113: 113}, 109: {}, 110: {59: 59, 71: 59}, 111: {128: 128, 130: 128, 115: 115, 132: 128, 134: 128, 123: 128, 124: 128, 125: 128, 126: 128}, 112: {114: 114}, 113: {106: 106}, 114: {112: 112}, 115: {128: 111, 130: 111, 132: 111, 134: 111, 123: 111, 124: 111, 125: 111, 126: 111, 111: 111}, 116: {59: 59, 119: 59}, 117: {59: 116, 116: 116, 71: 116}, 118: {113: 113, 106: 113}, 119: {59: 59, 116: 59}, 120: {121: 121}, 121: {120: 120}, 122: {67: 67}, 123: {128: 128, 130: 125, 115: 128, 132: 125, 134: 125, 124: 125, 125: 125, 126: 125, 111: 128}, 124: {128: 130, 130: 130, 115: 130, 132: 130, 134: 130, 123: 130, 125: 130, 126: 126, 111: 130}, 125: {128: 123, 130: 134, 115: 123, 132: 132, 134: 134, 123: 123, 124: 134, 126: 134, 111: 123}, 126: {128: 124, 130: 124, 115: 124, 132: 124, 134: 124, 123: 124, 124: 124, 125: 124, 111: 124}, 128: {130: 123, 115: 111, 132: 123, 134: 123, 123: 123, 124: 123, 125: 123, 126: 123, 111: 111}, 130: {128: 134, 115: 134, 132: 134, 134: 134, 123: 134, 124: 124, 125: 134, 126: 124, 111: 134}, 132: {128: 125, 130: 125, 115: 125, 134: 125, 123: 125, 124: 125, 125: 125, 126: 125, 111: 125}, 134: {128: 125, 130: 130, 115: 125, 132: 125, 123: 125, 124: 130, 125: 125, 126: 130, 111: 125}, 135: {}, 136: {90: 138, 138: 138, 95: 138}, 137: {}, 138: {136: 136, 90: 90, 95: 90}}"/>
+</World>

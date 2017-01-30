@@ -1,0 +1,3 @@
+title=shadereditor
+author= kivytest
+orientation=landscape

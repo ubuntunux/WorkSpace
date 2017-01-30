@@ -1,0 +1,119 @@
+#: import Image kivy.core.image
+#: import BTN_HEIGHT globals
+
+<OpenDialog>:
+    chooser: file_chooser.__self__
+    BoxLayout:
+        orientation: "vertical"
+        pos: root.pos
+        BoxLayout:
+            pos: root.pos
+            orientation: "horizontal"
+            FileChooserIconView:
+                id: file_chooser
+                filters: root.filters
+                on_selection: image.texture = root.get_texture(self.selection and self.selection[0] or '')
+            BoxLayout:
+                size_hint_x: 0.44
+                orientation: "vertical"
+                Image:
+                    id: image
+                    source: ''
+                    pos: root.pos
+                    keep_ratio: True
+                SettingSpacer:
+                BoxLayout:
+                    size_hint_y: 0.15
+                    Button:
+                        text: "Open"
+                        on_release: root.load(file_chooser.path, file_chooser.selection)
+                    Button:
+                        text: "Cancel"
+                        on_release: root.cancel()
+    SettingSpacer:
+
+
+<SaveDialog>:
+    chooser: file_chooser.__self__
+    text_input: text_input
+    spinner: spin.__self__
+    BoxLayout:
+        orientation: "vertical"
+        pos: root.pos
+        BoxLayout:
+            pos: root.pos
+            orientation: "horizontal"
+            FileChooserIconView:
+                id: file_chooser
+                filters: root.filters
+                on_selection: image.texture = root.get_texture(self.selection and self.selection[0] or '')
+            BoxLayout:
+                size_hint_x: 0.44
+                orientation: "vertical"
+                BoxLayout:
+                    size_hint_y: 0.3
+                    orientation: "vertical"
+                    TextInput:
+                        id: text_input
+                        hint_text: 'enter filename'
+                        size_hint_x: 1
+                        multiline: False
+                    Spinner:
+                        id: spin
+                        size_hint_x: 1
+                        text: root.formats[0]
+                        values: root.formats
+                SettingSpacer:
+                Image:
+                    id: image
+                    source: ''
+                    pos: root.pos
+                    keep_ratio: True
+                BoxLayout:
+                    size_hint_y: 0.15
+                    Button:
+                        text: "Save"
+                        on_release: root.save(file_chooser.path, text_input.text)
+                    Button:
+                        text: "Cancel"
+                        on_release: root.cancel()
+    SettingSpacer:
+
+
+<NewDialog>:
+    input_width: input_w.__self__
+    input_height: input_h.__self__
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        SettingSpacer:
+        BoxLayout:
+            size: root.size
+            pos: root.pos
+            orientation: "horizontal"
+            BoxLayout:
+                orientation: "vertical"
+                NumInput:
+                    id: input_w
+                    pos_hint: {'center_x':.5, 'center_y':.5}
+                    hint_text: 'width'
+                    multiline: False
+            BoxLayout:
+                orientation: "vertical"
+                NumInput:
+                    id: input_h
+                    pos_hint: {'center_x':.5, 'center_y':.5}
+                    hint_text: 'height'
+                    #size_hint_y: 0.6
+                    multiline: False
+        SettingSpacer:
+        BoxLayout:
+            size__y: BTN_HEIGHT
+            pos_hint: {'center_x':.5, 'center_y':.5}
+            Button:
+                text: "Ok"
+                on_release: root.ok(input_w.text, input_h.text)
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()

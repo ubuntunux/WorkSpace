@@ -1,0 +1,3 @@
+title=kvrun_camera
+author= kivytest
+orientation=portrait

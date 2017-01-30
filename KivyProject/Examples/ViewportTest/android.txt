@@ -1,0 +1,3 @@
+title=viewport
+author= kivytest
+orientation=portrait

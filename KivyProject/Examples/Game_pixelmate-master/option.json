@@ -1,0 +1,72 @@
+[
+	{
+		"type": "title",
+		"title": "Toolbars"
+	},
+    {
+        "type": "bool",
+        "title": "Toolbar auto hide",
+        "desc": "Hide toolbar panel when drawing",
+        "section": "toolbars",
+        "key": "toolbar_autohide",
+        "values": ["0", "1"]
+    },
+    {
+        "type": "bool",
+        "title": "Palette auto hide",
+        "desc": "Hide palette panel when drawing",
+        "section": "toolbars",
+        "key": "palette_autohide",
+        "values": ["0", "1"]
+    },
+    {
+        "type": "bool",
+        "title": "Layer's panel auto hide",
+        "desc": "Hide layer's panel when drawing",
+        "section": "toolbars",
+        "key": "layer_ribbon_autohide",
+        "values": ["0", "1"]
+    },
+	{
+		"type": "title",
+		"title": "Editor"
+	},
+	{
+		"type": "numeric",
+		"title": "Tools point size",
+		"desc": "Size of touch points for dragging & transforming",
+		"section": "editor",
+		"key": "tools_touch_point_size"
+	},
+	{
+		"type": "title",
+		"title": "Misc"
+	},
+    {
+        "type": "bool",
+        "title": "On exit confirmation",
+        "desc": "Ask confirmation on app exit",
+        "section": "misc",
+        "key": "exitconfirm",
+        "values": ["0", "1"]
+    },
+    {
+        "type": "bool",
+        "title": "On layer delete confirmation",
+        "desc": "Ask confirmation on layer delete",
+        "section": "misc",
+        "key": "layer_delete_confirm",
+        "values": ["0", "1"]
+    },
+    {
+        "type": "bool",
+        "title": "On layer merge confirmation",
+        "desc": "Ask confirmation on layer merge",
+        "section": "misc",
+        "key": "layer_merge_confirm",
+        "values": ["0", "1"]
+
+
+    }
+
+]

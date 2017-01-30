@@ -1,0 +1,2 @@
+from kivy.uix.dropdown import DropDown as d
+print(dir(d))

@@ -1,0 +1,3 @@
+title=Master Emergency Situations
+author=HSA_IMS_Kivy_2
+orientation=landscape

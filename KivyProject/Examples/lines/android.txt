@@ -1,0 +1,3 @@
+title=Lines
+author= kivytest
+orientation=portrait

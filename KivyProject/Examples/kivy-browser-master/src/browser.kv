@@ -1,0 +1,16 @@
+#: import browser browser
+
+<BrowserUI@RelativeLayout>:
+    input: input
+    TextInput:
+        id: input
+        size_hint: (1.0, 0.5)
+        pos_hint: {'y' : 0.5}
+        text: 'https://news.ycombinator.com/news'
+    Button:
+        text: 'Open'
+        size_hint: (0.425, 0.12)
+        pos_hint: {'y' : 0.05}
+        x: self.parent.center_x - self.width / 2.0
+        font_size: self.height * 0.34
+        on_press: browser.open_url(input.text)       

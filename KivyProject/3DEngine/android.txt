@@ -1,0 +1,3 @@
+title=3DEngine
+author= kivytest
+orientation=landscape

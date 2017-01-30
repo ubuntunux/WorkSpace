@@ -1,0 +1,3 @@
+title=shadertree
+author= kivy
+orientation=landscape

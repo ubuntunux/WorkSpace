@@ -1,0 +1,3 @@
+title=widget_KeyboardListner
+author= kivytest
+orientation=portrait

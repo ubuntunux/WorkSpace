@@ -1,0 +1,3 @@
+title=widget_LableWithMarkup
+author= kivytest
+orientation=portrait

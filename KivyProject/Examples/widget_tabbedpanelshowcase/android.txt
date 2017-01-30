@@ -1,0 +1,3 @@
+title=widget_tabbedpanelshowcase
+author= kivytest
+orientation=portrait

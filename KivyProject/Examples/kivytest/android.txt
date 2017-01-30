@@ -1,0 +1,3 @@
+title=kivytest
+author= kivytest
+orientation=portrait

@@ -1,0 +1,3 @@
+title=PixelMate
+author=werton
+orientation=landscape

@@ -1,0 +1,5 @@
+./Image/bg01.jpg
+./Image/explosion.png
+./Image/star.png
+./Sound/click.wav
+./PyInterpreter/python_logo.png

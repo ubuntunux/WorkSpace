@@ -1,0 +1,3 @@
+title=Canvas_stress
+author= kivytest
+orientation=portrait

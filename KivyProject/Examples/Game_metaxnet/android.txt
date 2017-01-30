@@ -1,0 +1,3 @@
+title=metaxnet
+author= kivytest
+orientation=landscape

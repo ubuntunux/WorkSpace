@@ -1,0 +1,3 @@
+title=multitexture
+author= kivytest
+orientation=portrait

@@ -1,0 +1,3 @@
+title=widget_scrollview
+author= kivytest
+orientation=portrait

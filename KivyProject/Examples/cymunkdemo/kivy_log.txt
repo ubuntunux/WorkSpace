@@ -1,0 +1,2 @@
+/data/data/org.kivy.pygame/files/lib/python2.7/site-packages/kivy/core/image/img_pygame.py:13: RuntimeWarning: import cdrom: No module named cdrom
+(ImportError: No module named cdrom)

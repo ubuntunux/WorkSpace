@@ -1,0 +1,3 @@
+title=DBDBDEEP
+author=EnuriSoft
+orientation=portrait

@@ -1,0 +1,51 @@
+#:kivy 1.0.9
+
+<NumPuzzleGame>:
+    numericWidget: numericWidget
+    kvW: root.size[0] * 0.1
+    kvH: root.size[1] * 0.1
+    canvas:
+        Rectangle:
+            source: 'background.jpg'
+            size: self.size
+        Color:
+            rgba: 0,0,0,0.5
+        Rectangle:
+            pos: (self.size[0]*0.075, self.size[1]*0.175)
+            size: (self.size[0]*0.85, self.size[1]*0.65)
+    Button:
+        text: 'Reset'
+        size: (root.kvW * 3, root.kvH)
+        pos: 0, root.height - root.kvH
+        on_release: root.setReset()
+    Button:
+        text: 'Mix'
+        size: (root.kvW * 3, root.kvH)
+        pos: root.kvW * 3, root.height - root.kvH
+        on_release: root.mixNumeric()
+    Label:
+        text: "Time : " + str("%.2f" % root.fTime)
+        halign: 'left'
+        valign: 'middle'
+        size: (root.kvW * 3, root.kvH)
+        pos: .0, root.height - root.kvH * 2
+        color: 1,1,1,1
+        font_size: 30
+        text_size: self.size
+    Label:
+        text: root.szDebug
+        halign: 'right'
+        valign: 'top'
+        size: (root.kvW * 3, root.kvH)
+        pos: root.kvW * 3*2.0, root.height - root.kvH
+        color: 1,1,1,1
+        font_size: 30
+        text_size: self.size
+    Scatter:
+        id: numericWidget
+        size: root.kvW * 8, root.kvH * 6
+        pos: root.kvW, root.kvH * 2
+        do_translation: False
+        do_rotation: False
+        do_scale: False
+<NumPuzzleRoot>:

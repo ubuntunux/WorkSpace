@@ -1,0 +1,3 @@
+title=widget_skeletone
+author= kivytest
+orientation=portrait

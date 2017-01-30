@@ -1,0 +1,3 @@
+title=widget_textinput
+author= kivytest
+orientation=portrait

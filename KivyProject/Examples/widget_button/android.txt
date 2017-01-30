@@ -1,0 +1,3 @@
+title=widget_button
+author= kivytest
+orientation=portrait

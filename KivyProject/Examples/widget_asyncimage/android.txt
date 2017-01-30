@@ -1,0 +1,3 @@
+title=widget_asyncimage
+author= kivytest
+orientation=portrait

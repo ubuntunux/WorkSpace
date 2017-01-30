@@ -1,0 +1,4 @@
+title=memory Game
+author=Kivy team
+orientation=landscape
+fullscreen=1

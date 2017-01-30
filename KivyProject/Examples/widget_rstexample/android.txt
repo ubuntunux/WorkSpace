@@ -1,0 +1,3 @@
+title=widget_rstexample
+author= kivytest
+orientation=portrait

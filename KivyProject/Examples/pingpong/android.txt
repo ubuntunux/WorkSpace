@@ -1,0 +1,3 @@
+title=Pingpong
+author= kivytest
+orientation=portrait

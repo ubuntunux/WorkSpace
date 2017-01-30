@@ -1,0 +1,3 @@
+title=echoserver
+author= kivytest
+orientation=portrait

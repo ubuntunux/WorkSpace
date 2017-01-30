@@ -1,0 +1,3 @@
+title=plasma
+author= kivy
+orientation=landscape

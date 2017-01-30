@@ -1,0 +1,8 @@
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\bin\Debug\Editor.exe
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\bin\Debug\Editor.pdb
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\obj\x86\Debug\BlockFortressLevelEditor.csprojResolveAssemblyReference.cache
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\obj\x86\Debug\BlockFortressMapEditor.MainForm.resources
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\obj\x86\Debug\BlockFortressMapEditor.Properties.Resources.resources
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\obj\x86\Debug\BlockFortressLevelEditor.csproj.GenerateResource.Cache
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\obj\x86\Debug\Editor.exe
+C:\Users\phelerox\Dropbox\BlockFortress\editor\editor source\obj\x86\Debug\Editor.pdb

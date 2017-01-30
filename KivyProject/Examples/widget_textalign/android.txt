@@ -1,0 +1,3 @@
+title=widget_textalign
+author= kivytest
+orientation=portrait

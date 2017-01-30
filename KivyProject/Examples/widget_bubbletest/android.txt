@@ -1,0 +1,3 @@
+title=widget_bubbleTest
+author= kivytest
+orientation=portrait

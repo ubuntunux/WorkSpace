@@ -1,0 +1,3 @@
+title=widget_printtouch
+author= kivytest
+orientation=portrait

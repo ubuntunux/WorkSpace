@@ -1,0 +1,3 @@
+title=widget_imageMipmap
+author= kivytest
+orientation=portrait

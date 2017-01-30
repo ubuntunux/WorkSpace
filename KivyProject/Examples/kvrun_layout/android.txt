@@ -1,0 +1,3 @@
+title=kvrun_layout
+author= kivytest
+orientation=portrait

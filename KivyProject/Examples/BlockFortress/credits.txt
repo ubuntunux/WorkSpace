@@ -1,0 +1,22 @@
+Images:
+background.png, paddle.png and the ball (public domain) courtesy of "Marcus" http://opengameart.org/content/breakout-graphics
+"PlanetCute" (heart.png) art by Daniel Cook (Lostgarden.com)
+confirm.png and reject.png originate from the Free Open Source Crystal icon set: http://commons.wikimedia.org/wiki/Crystal_Clear
+
+
+Music:
+coherence.ogg (CC-BY-SA), created by Maxstack (https://sites.google.com/site/maxstack/) http://opengameart.org/content/endgame-singularity
+
+Fonts:
+audiowide.ttf designed by Brian J. Bonislawsky for AOETI, released under the SIL Open Font License
+
+Note:
+Some code is refurbished from my earlier project PyTowerDefense: http://sourceforge.net/projects/pytowerdefense/
+All reused code is clearly marked as such.
+
+How to add more levels:
+Copy the contents of one of the level files. Paste it into a new file named X.txt, where X is the current highest level + 1. Change the blocks however you like. 0 means there's no block at that position, otherwise the value 1-9 or X (for ten) stands for how many hits the block can take before disappearing.
+
+Comment:
+Sadly, I didn't have any time to work on this game in August (the other course I'm taking took all time) so it lacks some features and polish I would have liked.
+For example, some boilerplate code for adding powerups is implemented but there are no powerups.

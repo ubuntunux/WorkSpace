@@ -1,0 +1,3 @@
+title=kvrun_scatter
+author= kivytest
+orientation=portrait

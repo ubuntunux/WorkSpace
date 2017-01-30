@@ -1,0 +1,3 @@
+title=Game_fingy
+author= kivytest
+orientation=landscape

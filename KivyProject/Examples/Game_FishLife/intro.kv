@@ -1,0 +1,22 @@
+#:kivy 1.0
+
+<FishLifeIntro>:
+    go_btn: button
+    help_btn: help
+    
+    source: "images/welcome.png"
+    size: self.size
+    
+    BoxLayout:
+        spacing: 10
+        orientation: 'vertical'
+        center: root.center_x, self.height / 2 + 20
+        
+        Button:
+            id: help
+            text: "HowToPlay?"
+        
+        Button:
+            id: button
+            text: "Feed the fish!"
+

@@ -1,0 +1,3 @@
+title=line_extend
+author= kivytest
+orientation=portrait

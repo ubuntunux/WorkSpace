@@ -1,0 +1,3 @@
+title=Game_fishlife
+author=Cyril Stoller
+orientation=landscape

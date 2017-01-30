@@ -1,0 +1,4 @@
+title=Application
+author=Kivy team
+orientation=landscape
+fullscreen=1
