@@ -1,3 +1,0 @@
-title=2048
-author= kivytest
-orientation=portrait
