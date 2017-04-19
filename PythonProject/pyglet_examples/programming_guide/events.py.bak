@@ -3,14 +3,14 @@
 # pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
-#
+# 
 # Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
+# modification, are permitted provided that the following conditions 
 # are met:
 #
 #  * Redistributions of source code must retain the above copyright
 #    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above copyright
+#  * Redistributions in binary form must reproduce the above copyright 
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
@@ -33,36 +33,34 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 
-'''Convert an image to another file format supported by pyglet.
-
-Usage::
-    python image_convert.py <src-file> <dest-file>
-
+'''
 '''
 
-from __future__ import print_function
-
-import sys
+__docformat__ = 'restructuredtext'
+__version__ = '$Id$'
 
 import pyglet
+from pyglet.window import key
+from pyglet.window import mouse
 
+window = pyglet.window.Window()
 
-def convert(src, dest):
-    if '.dds' in src.lower():
-        # Compressed textures need to be uploaded to the video card before
-        # they can be saved.
-        texture = pyglet.image.load(src).get_texture()
-        texture.save(dest)
-    else:
-        # Otherwise just save the loaded image in the new format.
-        image = pyglet.image.load(src)
-        image.save(dest)
+@window.event
+def on_key_press(symbol, modifiers):
+    if symbol == key.A:
+        print 'The "A" key was pressed.'
+    elif symbol == key.LEFT:
+        print 'The left arrow key was pressed.'
+    elif symbol == key.ENTER:
+        print 'The enter key was pressed.'
 
-if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print(__doc__)
-        sys.exit(1)
+@window.event
+def on_mouse_press(x, y, button, modifiers):
+    if button == mouse.LEFT:
+        print 'The left mouse button was pressed.'
 
-    src = sys.argv[1]
-    dest = sys.argv[2]
-    convert(src, dest)
+@window.event
+def on_draw():
+    window.clear()
+
+pyglet.app.run()
