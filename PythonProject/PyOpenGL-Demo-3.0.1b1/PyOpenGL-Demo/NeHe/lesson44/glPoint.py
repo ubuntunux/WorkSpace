@@ -1,4 +1,4 @@
-import glVector
+from . import glVector
 
 class glPoint (list):
 	def __init__ (self, first = 0, second = 0, third = 0):

@@ -49,7 +49,7 @@ class particle:
         
 prts=[]
 
-for i in xrange(MAX_PARTICLES):
+for i in range(MAX_PARTICLES):
     particl=particle() 
     prts.append(particl)
     
@@ -96,7 +96,7 @@ def InitGL(Width, Height):                # We call this right after our OpenGL 
     glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);   
     glEnable(GL_TEXTURE_2D);                  
     
-    for i in xrange(MAX_PARTICLES):
+    for i in range(MAX_PARTICLES):
         prts[i]
         
         prts[i].LIFE=1.0
@@ -139,7 +139,7 @@ def DrawGLScene():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()                         # Reset The View
     
-    for i in xrange(MAX_PARTICLES):
+    for i in range(MAX_PARTICLES):
         if prts[i].ACTIVE==1:
             x=float(prts[i].X)
             y=float(prts[i].Y)
@@ -196,23 +196,23 @@ def keyPressed(key, x, y):
     if key == ESCAPE:
         sys.exit()
     elif key == 'W':
-        for i in xrange(MAX_PARTICLES):
+        for i in range(MAX_PARTICLES):
             if prts[i].Yj<1.5:
                 prts[i].Yj+=0.1
     elif key == 'S':
-        for i in xrange(MAX_PARTICLES):
+        for i in range(MAX_PARTICLES):
             if prts[i].Yj>-1.5:
                 prts[i].Yj-=0.1
     elif key == 'A':
-        for i in xrange(MAX_PARTICLES):
+        for i in range(MAX_PARTICLES):
             if prts[i].Xj>-1.5:
                 prts[i].Xj-=0.1
     elif key == 'D':
-        for i in xrange(MAX_PARTICLES):
+        for i in range(MAX_PARTICLES):
             if prts[i].Xj<1.5:
                 prts[i].Xj+=0.1
     elif key == 'F':
-        for i in xrange(MAX_PARTICLES):    
+        for i in range(MAX_PARTICLES):    
             prts[i].X=0.0
             prts[i].Y=0.0
             prts[i].Z=0.0
@@ -273,6 +273,6 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-    print "Hit ESC key to quit."
-    print 'other commands: WASD (direction) ZX (zoom)'
+    print("Hit ESC key to quit.")
+    print('other commands: WASD (direction) ZX (zoom)')
     main()

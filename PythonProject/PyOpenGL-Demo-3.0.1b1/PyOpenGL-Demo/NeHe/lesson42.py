@@ -65,11 +65,11 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 try:
 	import numpy as Numeric
-except ImportError, err:
+except ImportError as err:
 	try: 
 		import Numeric
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 import random
@@ -141,7 +141,7 @@ def Reset ():
 	# This Will seed the random num stream with current system time.
 	random.seed ()
 
-	for loop in xrange (4):												# // Loop So We Can Assign 4 Random Colors
+	for loop in range (4):												# // Loop So We Can Assign 4 Random Colors
 		r[loop]=128 + random.randint (0,127) 							# // Pick A Random Red Color (Bright)
 		g[loop]=128 + random.randint (0,127) 							# // Pick A Random Green Color (Bright)
 		b[loop]=128 + random.randint (0,127) 							# // Pick A Random Blue Color (Bright)
@@ -185,8 +185,8 @@ def Update ():
 	global width, height, done, mx, my
 
 	done=True;															# // Set done To True
-	for x in xrange (0, width, 2):										# // Loop Through All The Rooms
-		for y in xrange (0, height, 2):									# // On X And Y Axis
+	for x in range (0, width, 2):										# // Loop Through All The Rooms
+		for y in range (0, height, 2):									# // On X And Y Axis
 			if (tex_data[((x+(width*y))*3)]==0):						# // If Current Texture Pixel (Room) Is Blank
 				done=False;												# // We Have To Set done To False (Not Finished Yet)
 
@@ -261,7 +261,7 @@ def DrawGLScene ():
 
 	glClear (GL_COLOR_BUFFER_BIT);										# // Clear Screen
 
-	for loop in xrange (4):												# // Loop To Draw Our 4 Views
+	for loop in range (4):												# // Loop To Draw Our 4 Views
 		glColor3ub(r[loop],g[loop],b[loop]);							# // Assign Color To Current View
 
 		if (loop==0):													# // If We Are Drawing The First Scene
@@ -437,7 +437,7 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-	print "Hit ESC key to quit."
+	print("Hit ESC key to quit.")
 	main()
 
 

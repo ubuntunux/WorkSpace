@@ -6,7 +6,7 @@ import sys
 import copy
 from math import cos, sin
 
-from ArcBall import * 				# ArcBallT and this tutorials set of points/vectors/matrix types
+from .ArcBall import * 				# ArcBallT and this tutorials set of points/vectors/matrix types
 
 PI2 = 2.0*3.1415926535			# 2 * PI (not squared!) 		// PI Squared
 
@@ -100,8 +100,8 @@ def Upon_Click (button, button_state, cursor_x, cursor_y):
 def Torus(MinorRadius, MajorRadius):		
 	# // Draw A Torus With Normals
 	glBegin( GL_TRIANGLE_STRIP );									# // Start A Triangle Strip
-	for i in xrange (20): 											# // Stacks
-		for j in xrange (-1, 20): 										# // Slices
+	for i in range (20): 											# // Stacks
+		for j in range (-1, 20): 										# // Slices
 			# NOTE, python's definition of modulus for negative numbers returns
 			# results different than C's
 			#       (a / d)*d  +  a % d = a

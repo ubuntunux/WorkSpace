@@ -25,17 +25,17 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-from glPoint import *
-from glVector import *
+from .glPoint import *
+from .glVector import *
 from math import sqrt, fabs
 
 try:
 	import numpy as Numeric
-except ImportError, err:
+except ImportError as err:
 	try: 
 		import Numeric
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 import copy
@@ -444,13 +444,13 @@ class glCamera:
 		Frustum = self.m_Frustum
 		# // The idea here is the same as the PointInFrustum function.
 		if (Radius != 0):
-			for i in xrange (6):
+			for i in range (6):
 			# // If the point is outside of the plane then its not in the viewing volume.
 				if(Frustum[i][0] * p.x + Frustum[i][1] * p.y + Frustum[i][2] * p.z + Frustum[i][3] <= -Radius):
 					return(False);
 		else:
 			# // The idea here is the same as the PointInFrustum function.
-			for i in xrange (6):
+			for i in range (6):
 				# // If the point is outside of the plane then its not in the viewing volume.
 				if(Frustum[i][0] * p.x + Frustum[i][1] * p.y + Frustum[i][2] * p.z + Frustum[i][3] <= 0):
 					return(False);
@@ -467,7 +467,7 @@ class glCamera:
 
 		Frustum = self.m_Frustum
 		# // Loop through all our clipping planes
-		for i in xrange (6):
+		for i in range (6):
 			# // If the point is outside of the plane then its not in the viewing volume.
 			if(Frustum[i][0] * x + Frustum[i][1] * y + Frustum[i][2] * z + Frustum[i][3] <= 0):
 				return(False);

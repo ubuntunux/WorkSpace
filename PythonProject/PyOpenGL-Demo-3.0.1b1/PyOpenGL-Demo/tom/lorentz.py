@@ -13,11 +13,11 @@ __author__ = 'Tarn Weisner Burton <twburton@users.sourceforge.net>'
 import sys
 try:
 	from numpy import *
-except ImportError, err:
+except ImportError as err:
 	try: 
 		from Numeric import *
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 from OpenGL.GL import *
@@ -65,7 +65,7 @@ def redraw(o):
 #
 # Demo starts here really.
 if __name__ == "__main__":
-	import Tkinter, sys
+	import tkinter, sys
 	
 	# Create the opengl widget here.
 	
@@ -85,4 +85,4 @@ if __name__ == "__main__":
 	
 	# Enter the tk mainloop.
 	
-	Tkinter.mainloop()
+	tkinter.mainloop()

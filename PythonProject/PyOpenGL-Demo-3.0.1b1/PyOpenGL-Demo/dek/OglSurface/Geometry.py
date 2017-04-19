@@ -5,11 +5,11 @@ if __name__ == '__build__':
 
 try:
 	import numpy as Numeric
-except ImportError, err:
+except ImportError as err:
 	try: 
 		import Numeric
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 

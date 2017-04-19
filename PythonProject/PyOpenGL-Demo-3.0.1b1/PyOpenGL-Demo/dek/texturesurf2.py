@@ -29,7 +29,7 @@ import sys
 try:
 	import Numeric
 except:
-	print "This demo requires the Numeric extension, sorry"
+	print("This demo requires the Numeric extension, sorry")
 	sys.exit()
 from Image import *
 from OpenGL.GL import *

@@ -7,14 +7,14 @@ import os
 import string
 try:
 	import numpy as Numeric
-except ImportError, err:
+except ImportError as err:
 	try: 
 		import Numeric
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
-import Geometry
+from . import Geometry
 import copy
 
 GUAAtoms = [ "N2", "O6", "C6", "C5", "N7", "C8", "N9", "C4", "N3", "C2", "N1" ]
@@ -143,7 +143,7 @@ class PDB:
 
 	def Print(self):
 		for i in self.records:
-			print i.type, i.anum, i.atom, i.residue, i.chain, i.rnum
+			print(i.type, i.anum, i.atom, i.residue, i.chain, i.rnum)
 
 	def ReturnAnum(self, atom, rnum):
 		for i in range(len(self.records)):

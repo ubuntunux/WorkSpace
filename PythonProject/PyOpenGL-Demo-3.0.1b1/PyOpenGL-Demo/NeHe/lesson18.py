@@ -251,7 +251,7 @@ def main():
 	usage = """Press L to toggle Lighting
 Press T to change textures
 Press O to change objects"""
-	print usage
+	print(usage)
 	global window
 	glutInit(sys.argv)
 
@@ -298,6 +298,6 @@ Press O to change objects"""
 
 
 # Print message to console, and kick off the main to get it rolling.
-print "Hit ESC key to quit."
+print("Hit ESC key to quit.")
 main()
 		

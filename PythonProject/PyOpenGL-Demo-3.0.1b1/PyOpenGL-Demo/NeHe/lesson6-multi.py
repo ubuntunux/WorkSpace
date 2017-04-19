@@ -89,11 +89,11 @@ def LoadTexture(name):
 def InitGL(Width, Height):				# We call this right after our OpenGL window is created.
 	global textures, glMultiTexCoord2f, glActiveTexture, GL_TEXTURE0, GL_TEXTURE1
 
-	print 'Checking for extension support'
+	print('Checking for extension support')
 	if not glMultiTexCoord2f:
-		print 'No OpenGL v1.3 built-in multi-texture support, checking for extension'
+		print('No OpenGL v1.3 built-in multi-texture support, checking for extension')
 		if not glMultiTexCoord2fARB:
-			print 'No GL_ARB_multitexture support, sorry, cannot run this demo!'
+			print('No GL_ARB_multitexture support, sorry, cannot run this demo!')
 			sys.exit(1)
 		else:
 			glMultiTexCoord2f = glMultiTexCoord2fARB
@@ -101,12 +101,12 @@ def InitGL(Width, Height):				# We call this right after our OpenGL window is cr
 			GL_TEXTURE0 = GL_TEXTURE0_ARB
 			GL_TEXTURE1 = GL_TEXTURE1_ARB
 	else:
-		print 'Using OpenGL v1.3 built-in multi-texture support'
+		print('Using OpenGL v1.3 built-in multi-texture support')
 	try:
 		if not glInitMultitextureARB():
-			print "Help!  No GL_ARB_multitexture"
+			print("Help!  No GL_ARB_multitexture")
 			sys.exit(1)
-	except NameError, err:
+	except NameError as err:
 		# don't need to init a built-in (or an extension any more, for that matter)
 		pass
 
@@ -262,5 +262,5 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-	print "Hit ESC key to quit."
+	print("Hit ESC key to quit.")
 	main()

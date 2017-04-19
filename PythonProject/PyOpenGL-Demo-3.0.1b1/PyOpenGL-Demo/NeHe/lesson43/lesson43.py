@@ -41,13 +41,6 @@ from math import cos
 
 import sys
 
-# Python 2.2 defines these directly
-try:
-	True
-except NameError:
-	True = 1==1
-	False = 1==0
-
 
 # Some api in the chain is translating the keystrokes to this octal string
 # so instead of saying: ESCAPE = 27, we use the following.
@@ -72,6 +65,7 @@ def InitGL(Width, Height):				# We call this right after our OpenGL window is cr
 	# Currently omitting the wgl based font. See lesson13.py for example use of wgl font.
 	# FYI, the ttf font file "Test.ttf" in lesson43 is the typeface "Arial Black Italic".
 	# our_font = glFreeType.font_data ("ARBLI___.ttf", 16)
+
 	our_font = glFreeType.font_data ("Test.ttf", 16)
 
 	return True
@@ -192,5 +186,5 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-	print "Hit ESC key to quit."
+	print("Hit ESC key to quit.")
 	main()

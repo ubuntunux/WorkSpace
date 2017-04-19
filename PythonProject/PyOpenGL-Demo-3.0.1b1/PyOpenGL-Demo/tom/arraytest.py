@@ -16,12 +16,12 @@ from OpenGL.Tk import *
 try:
 	from numpy import *
 	from numpy.random import *
-except ImportError, err:
+except ImportError as err:
 	try: 
 		from Numeric import *
 		from RandomArray import *
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 

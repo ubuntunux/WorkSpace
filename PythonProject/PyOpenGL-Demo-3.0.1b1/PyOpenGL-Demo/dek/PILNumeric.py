@@ -7,15 +7,15 @@ if __name__ == '__build__':
 ## together to create all sorts of images.
 try:
 	import numpy as Numeric
-except ImportError, err:
+except ImportError as err:
 	try: 
 		import Numeric
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 import FFT
-import Tkinter
+import tkinter
 import Image
 import ImageTk
 import sys
@@ -35,13 +35,13 @@ def demo():
     data = data.astype('l')
 
     im = Image.new("RGBA", (w, h))
-    print len(data.tostring("raw", "RGBX", 0, -1))
-    print len(im.tostring("raw", "RGBX", 0, -1))
+    print(len(data.tostring("raw", "RGBX", 0, -1)))
+    print(len(im.tostring("raw", "RGBX", 0, -1)))
     im.fromstring(data.tostring("raw", "RGBX", 0, -1),"raw", "RGBX", 0, -1)
 
-    root = Tkinter.Tk()
+    root = tkinter.Tk()
     image = ImageTk.PhotoImage(im)
-    x = Tkinter.Label(root, image=image)
+    x = tkinter.Label(root, image=image)
     x.pack()
 
     root.mainloop()

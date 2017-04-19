@@ -55,7 +55,7 @@ def pick(o, p1, p2, event=None):
 #
 # Demo starts here really.
 def main():
-	import Tkinter, sys
+	import tkinter, sys
 	
 	o = Opengl(None, width = 200, height = 200, double = 1, depth = 1)
 	glutInit( [] )
@@ -104,11 +104,11 @@ def main():
 	o.picked_sphere = -1
 	o.autospin_allowed = 1
 	
-	l = Tkinter.Label(None, text = 'Press Shift-Button-1 over an\natom to highlight')
+	l = tkinter.Label(None, text = 'Press Shift-Button-1 over an\natom to highlight')
 	l.pack(side = 'top', expand = 1, fill = 'both')
 	
 	# Enter the tk mainloop.
-	Tkinter.mainloop()
+	tkinter.mainloop()
 	
 
 if __name__ == "__main__":

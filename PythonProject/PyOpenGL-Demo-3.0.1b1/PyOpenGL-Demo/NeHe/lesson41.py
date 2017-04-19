@@ -89,7 +89,7 @@ def BuildTexture (path):
 		# OleLoadPicturePath () supports url paths, but that capability isn't critcial to this tutorial.
 		Picture = Image.open (path)
 	except:
-		print "Unable to open image file '%s'." % (path)
+		print("Unable to open image file '%s'." % (path))
 		return False, 0
 
 	glMaxTexDim = glGetIntegerv (GL_MAX_TEXTURE_SIZE)
@@ -159,7 +159,7 @@ def Extension_Init ():
 
 	# After calling this, we will be able to invoke glFogCoordEXT ()
 	if (not glInitFogCoordEXT ()):
-		print "Help!  No GL_EXT_ForCoord"
+		print("Help!  No GL_EXT_ForCoord")
 		sys.exit(1)
 		return False
 	return True
@@ -360,5 +360,5 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-	print "Hit ESC key to quit."
+	print("Hit ESC key to quit.")
 	main()

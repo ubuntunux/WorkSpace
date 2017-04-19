@@ -14,13 +14,13 @@ from OpenGL.GL import *
 from OpenGL.Tk import *
 
 def new_file(self):
-    print "opening new file"
+    print("opening new file")
 
 def open_file(self):
-    print "opening OLD file"
+    print("opening OLD file")
 
 def print_something(self):
-    print "picked a menu item"
+    print("picked a menu item")
 
 
 class Demo:
@@ -85,7 +85,7 @@ class Demo:
 		glClearColor(0, 0, 0.5, 0)
 		glClear(GL_COLOR_BUFFER_BIT)
 		if ogl.grob == -1:
-			from logo import define_logo
+			from .logo import define_logo
 			ogl.grob = glGenLists(1);
 			glNewList(ogl.grob, GL_COMPILE_AND_EXECUTE);
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, [1, 0, 0, 0])

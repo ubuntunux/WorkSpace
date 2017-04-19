@@ -58,11 +58,11 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 try:
 	import numpy as Numeric
-except ImportError, err:
+except ImportError as err:
 	try: 
 		import Numeric
-	except ImportError, err:
-		print "This demo requires the numpy or Numeric extension, sorry"
+	except ImportError as err:
+		print("This demo requires the numpy or Numeric extension, sorry")
 		import sys
 		sys.exit()
 import traceback 
@@ -177,7 +177,7 @@ class CMesh:
 		while (nZ < sizeY):
 			nX = 0
 			while (nX < sizeY):
-				for nTri in xrange (6):
+				for nTri in range (6):
 					# // Using This Quick Hack, Figure The X,Z Position Of The Point
 					flX = float (nX)
 					if (nTri == 1) or (nTri == 2) or (nTri == 5):
@@ -276,7 +276,7 @@ def IsExtensionSupported (TargetExtension):
 			break;
 	if (found_extension == False):
 		gl_supports_extension = False
-		print "OpenGL rendering context does not support '%s'" % (TargetExtension)
+		print("OpenGL rendering context does not support '%s'" % (TargetExtension))
 		return False
 
 	gl_supports_extension = True
@@ -308,11 +308,11 @@ def IsExtensionSupported (TargetExtension):
 	import traceback
 	try:
 		__import__ (extension_module_name)
-		print "PyOpenGL supports '%s'" % (TargetExtension)
+		print("PyOpenGL supports '%s'" % (TargetExtension))
 	except:
 		traceback.print_exc()
-		print 'Failed to import', extension_module_name
-		print "OpenGL rendering context supports '%s'" % (TargetExtension),
+		print('Failed to import', extension_module_name)
+		print("OpenGL rendering context supports '%s'" % (TargetExtension), end=' ')
 		return False
 
 	return True
@@ -330,7 +330,7 @@ def InitGL(Width, Height):				# We call this right after our OpenGL window is cr
 	g_pMesh = CMesh ()
 	if (not g_pMesh.LoadHeightmap ("Terrain.bmp",
 		CMesh.MESH_HEIGHTSCALE, CMesh.MESH_RESOLUTION)):
-		print "Error Loading Heightmap"
+		print("Error Loading Heightmap")
 		sys.exit(1)
 		return False
 
@@ -341,7 +341,7 @@ def InitGL(Width, Height):				# We call this right after our OpenGL window is cr
 		# so that we call the Extension.
 
 		if (not glInitVertexBufferObjectARB()):
-			print "Help!  No GL_ARB_vertex_buffer_object"
+			print("Help!  No GL_ARB_vertex_buffer_object")
 			sys.exit(1)
 			return False
 		# Now we can call to gl*Buffer* ()
@@ -529,7 +529,7 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-	print "Hit ESC key to quit."
+	print("Hit ESC key to quit.")
 	main()
 
 

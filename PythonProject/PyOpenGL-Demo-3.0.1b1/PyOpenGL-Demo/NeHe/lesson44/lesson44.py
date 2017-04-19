@@ -47,8 +47,8 @@ import sys
 import time						# clock ()
 import os
 
-from glCamera import *
-from glFont import *
+from .glCamera import *
+from .glFont import *
 
 
 # *********************** Globals *********************** 
@@ -106,7 +106,7 @@ def LoadTexture (path):
 		# support by our rendering context for a GL texture.
 		# Note, Feel free to experiemnt and force a resize by placing a small val into
 		# glMaxTexDim (e.g. 32,64,128).
-		raise RuntimeError, "Texture image (%d by %d) is larger than supported by GL %d." % (WidthPixels, HeightPixels, glMaxTexDim)
+		raise RuntimeError("Texture image (%d by %d) is larger than supported by GL %d." % (WidthPixels, HeightPixels, glMaxTexDim))
 
 	# Create a raw string from the image data - data will be unsigned bytes
 	# RGBpad, no stride (0), and first line is top of image (-1)
@@ -150,7 +150,7 @@ def InitGL(Width, Height):				# We call this right after our OpenGL window is cr
 		gFont.SetWindowSize (1024, 768)
 		gFont.BuildFont (1.0)
 	else:
-		raise RuntimeError, "Failed to build font 'Art\\Font.bmp'"
+		raise RuntimeError("Failed to build font 'Art\\Font.bmp'")
 
 
 	gCamera = glCamera ()
@@ -161,22 +161,22 @@ def InitGL(Width, Height):				# We call this right after our OpenGL window is cr
 	# // Try and load the HardGlow texture tell the user if we can't find it then quit
 	status, gCamera.m_GlowTexture = LoadTexture(os.path.join("Art","HardGlow2.bmp"));
 	if (not status):
-		raise RuntimeError, "Failed to load Hard Glow texture."
+		raise RuntimeError("Failed to load Hard Glow texture.")
 
 	# // Try and load the BigGlow texture tell the user if we can't find it then quit
 	status, gCamera.m_BigGlowTexture = LoadTexture(os.path.join("Art","BigGlow3.bmp"))
 	if (not status):
-		raise RuntimeError, "Failed to load Big Glow texture."
+		raise RuntimeError("Failed to load Big Glow texture.")
 
 	# // Try and load the Halo texture tell the user if we can't find it then quit
 	status, gCamera.m_HaloTexture = LoadTexture(os.path.join("Art","Halo3.bmp"))
 	if (not status):
-		raise RuntimeError, "Failed to load Halo texture."
+		raise RuntimeError("Failed to load Halo texture.")
 	
 	# // Try and load the Streaks texture tell the user if we can't find it then quit
 	status, gCamera.m_StreakTexture = LoadTexture(os.path.join("Art","Streaks4.bmp"))
 	if (not status):
-		raise RuntimeError, "Failed to load Streaks texture."
+		raise RuntimeError("Failed to load Streaks texture.")
 
 	# //##################  NEW STUFF  ##################################
 
@@ -472,6 +472,6 @@ def main():
 
 # Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-	print "Hit ESC key to quit."
+	print("Hit ESC key to quit.")
 	main()
 

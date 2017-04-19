@@ -1,19 +1,9 @@
 #!/usr/bin/python
 
-# This is statement is required by the build system to query build info
-if __name__ == '__build__':
-	raise Exception
-
-
-import string
-__version__ = string.split('$Revision: 1.1.1.1 $')[1]
-__date__ = string.join(string.split('$Date: 2007/02/15 19:25:40 $')[1:3], ' ')
-__author__ = 'Tarn Weisner Burton <twburton@users.sourceforge.net>'
-
 from OpenGL.GL import *
 from OpenGL.Tk import *
 
-from logo import define_logo
+from .logo import define_logo
 
 def redraw(o):
 	if o.grob == -1:
@@ -39,7 +29,7 @@ def redraw(o):
 #
 # Demo starts here really.
 if __name__ == "__main__":
-	import Tkinter, sys
+	import tkinter, sys
 	
 	o = Opengl(None, width = 400, height = 200, double = 1, depth = 1)
 	o.pack(expand = 1, fill = 'both')
@@ -54,5 +44,5 @@ if __name__ == "__main__":
 	
 	# Enter the tk mainloop.
 	
-	Tkinter.mainloop()
+	tkinter.mainloop()
 	

@@ -13,7 +13,7 @@ __author__ = 'Tarn Weisner Burton <twburton@users.sourceforge.net>'
 from OpenGL.GL import *
 from OpenGL.Tk import *
 from OpenGL.GLUT import *
-from Tkinter import *
+from tkinter import *
 import sys
 
 class MyApp(Frame):
@@ -53,7 +53,7 @@ class MyApp(Frame):
 		image = Image.fromstring( "RGB", (width, height), data.tostring() )
 		image = image.transpose( Image.FLIP_TOP_BOTTOM)
 		image.save( filename, format )
-		print 'Saved image to %s'% (os.path.abspath( filename))
+		print('Saved image to %s'% (os.path.abspath( filename)))
 		return image
 
 	def __init__(self):

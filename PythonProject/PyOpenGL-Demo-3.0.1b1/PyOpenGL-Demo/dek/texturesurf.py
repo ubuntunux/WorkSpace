@@ -80,7 +80,7 @@ class Surface:
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-		print type(self.image)
+		print(type(self.image))
 		glTexImage2D(GL_TEXTURE_2D, 0, 3, self.imageWidth, self.imageHeight, 0,
 					 GL_RGBA, GL_UNSIGNED_BYTE, self.image)
 		glEnable(GL_TEXTURE_2D)
