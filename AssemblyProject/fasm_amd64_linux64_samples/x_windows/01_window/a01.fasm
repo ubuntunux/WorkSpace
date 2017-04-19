@@ -1,0 +1,143 @@
+; create a simple window with window name and new cursor
+
+format ELF64
+
+include '../../include/X.inc'		; x windows defines
+include '../../include/Xlib.inc'	; x windows structures
+include '../../include/cursorfont.inc'	; x windows cursor numbers
+include '../../include/linux_def.inc'	; linux defines
+include '../../include/linux_struc.inc'	; linux structures
+include '../../include/unistd64.inc'	; syscall numbers
+
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCreateSimpleWindow
+ extrn XStoreName
+ extrn XCreateFontCursor
+ extrn XDefineCursor
+ extrn XMapWindow
+ extrn XFlush
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+virtual at 0
+xdisp	XPrivDisplay			; structure from Xlib.inc file
+end virtual
+
+	mov	edx,dword [rax + xdisp.default_screen]	; XDisplay.default_screen
+	mov	rsi,qword [rax + xdisp.screens]
+	lea	rdi,[rsi + rdx*8]
+; RDI is pointing to the Screen structure
+
+black		=	00000000h
+red		=	00FF0000h
+green		=	0000FF00h
+blue		=	000000FFh
+yellow		=	red or green
+purple		=	red or blue
+white		=	red or green or blue
+
+win_width	=	250
+win_height	=	100
+
+virtual at 0
+scr	Screen			; structure from Xlib.inc file
+end virtual
+
+	mov	rcx,qword [rdi + scr.white_pixel]
+	mov	rdx,qword [rdi + scr.black_pixel]
+	mov	qword [rsp+8*2],rcx	; background
+					; or try mov ...,purple
+	mov	qword [rsp+8*1],rdx	; border
+	mov	qword [rsp+8*0],4	; border_width
+	mov	r9d,win_height		; height
+	mov	r8d,win_width		; width
+	xor	ecx,ecx			; y top-left outside corner of the window
+	xor	edx,edx			; x top-left outside corner of the window
+	mov	rsi,qword [rdi + scr.root]	; Window parent
+	mov	rdi,qword [disp]	; display
+	call	XCreateSimpleWindow	; see: man XCreateSimpleWindow
+	mov	qword [win],rax 
+
+	lea	rdx,[win_name]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XStoreName
+
+	mov	esi,XC_pirate
+	mov	rdi,qword [disp]
+	call	XCreateFontCursor
+
+	mov	rdx,rax
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDefineCursor
+
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XMapWindow
+
+	mov	rdi,qword [disp]
+	call	XFlush
+
+virtual at 0
+time	timespec
+end virtual
+
+	xor	esi,esi
+	lea	rdi,[timewait]
+	mov	qword [rdi + time.tv_sec],2		; wait 2 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep
+	syscall
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+win_name	db	'FASM x-window sample',0
+
+
+section '.bss' writeable
+
+disp		rq	1
+win		rq	1
+
+timewait	timespec		; structure from linux_struc.inc

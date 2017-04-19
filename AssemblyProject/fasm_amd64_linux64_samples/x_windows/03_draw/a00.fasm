@@ -1,0 +1,215 @@
+; draw point, line, lines, rectangle, arc
+
+format ELF64
+
+include '../../include/X.inc'		; x windows defines
+include '../../include/Xlib.inc'	; x windows structures
+include '../../include/linux_def.inc'	; linux defines
+include '../../include/linux_struc.inc'	; linux structures
+include '../../include/unistd64.inc'	; syscall numbers
+
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCreateSimpleWindow
+ extrn XMapWindow
+ extrn XSync
+ extrn XCreateGC
+ extrn XDrawPoint
+ extrn XDrawLine
+ extrn XDrawLines
+ extrn XDrawRectangle
+ extrn XDrawArc
+ extrn XFlush
+ extrn XFreeGC
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+virtual at 0
+xdisp	XPrivDisplay			; structure from Xlib.inc file
+end virtual
+
+	mov	edx,dword [rax + xdisp.default_screen]	; XDisplay.default_screen
+	mov	rsi,qword [rax + xdisp.screens]
+	lea	rdi,[rsi + rdx*8]
+; RDI is pointing to the Screen structure
+
+black		=	00000000h
+red		=	00FF0000h
+green		=	0000FF00h
+blue		=	000000FFh
+yellow		=	red or green
+purple		=	red or blue
+white		=	red or green or blue
+
+win_width	=	200
+win_height	=	100
+
+virtual at 0
+scr	Screen			; structure from Xlib.inc file
+end virtual
+
+	mov	rcx,qword [rdi + scr.white_pixel]
+	mov	rdx,qword [rdi + scr.black_pixel]
+	mov	qword [our_white_pixel],rcx
+	mov	qword [our_black_pixel],rdx
+	mov	qword [rsp+8*2],rcx	; background
+	mov	qword [rsp+8*1],rdx	; border
+	mov	qword [rsp+8*0],4	; border_width
+	mov	r9d,win_height		; height
+	mov	r8d,win_width		; width
+	xor	ecx,ecx			; y top-left outside corner of the window
+	xor	edx,edx			; x top-left outside corner of the window
+	mov	rsi,qword [rdi + scr.root]	; Window parent
+	mov	rdi,qword [disp]	; display
+	call	XCreateSimpleWindow	; see: man XCreateSimpleWindow
+	mov	qword [win],rax 
+
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XMapWindow
+
+if FALSE=0
+	xor	esi,esi
+else
+	mov	rsi,FALSE
+end if
+	mov	rdi,qword [disp]
+	call	XSync
+
+virtual at 0
+gcval	XGCValues
+end virtual
+
+	mov	rax,qword [our_black_pixel]
+	lea	rcx,[values]
+	mov	qword [rcx + gcval.foreground],rax
+	mov	dword [rcx + gcval.line_width],0	; try more, e.g. 3
+	mov	dword [rcx + gcval.line_style],LineSolid
+	mov	dword [rcx + gcval.cap_style],CapRound
+	mov	dword [rcx + gcval.join_style],JoinRound
+	mov	dword [rcx + gcval.arc_mode],ArcChord
+	mov	edx,GCArcMode or GCJoinStyle or GCCapStyle or GCLineStyle or \
+			GCLineWidth or 	GCForeground	; valuemask
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XCreateGC
+	mov	qword [our_gc],rax
+
+; draw
+	mov	qword [rsp+8*0],0
+	xor	r9,r9
+	mov	r8d,100
+	mov	ecx,130
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawLine
+
+	xor	r9,r9
+	mov	r8d,4
+	lea	rcx,[points]
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawLines
+
+	mov	r8d,win_height/2
+	mov	ecx,win_width/2
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawPoint
+
+	mov	qword [rsp+8*0],90
+	mov	r9d,116
+	mov	r8d,4
+	mov	ecx,6
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawRectangle
+
+	mov	qword [rsp+8*2],360 shl 6
+	mov	qword [rsp+8*1],0
+	mov	qword [rsp+8*0],99
+	mov	r9d,99
+	mov	r8d,win_height/2 - 50
+	mov	ecx,win_width/2 - 50
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawArc
+
+	mov	rdi,qword [disp]
+	call	XFlush
+
+virtual at 0
+time	timespec
+end virtual
+
+	xor	esi,esi
+	lea	rdi,[timewait]
+	mov	qword [rdi + time.tv_sec],4		; wait 4 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep
+	syscall
+
+	mov	rsi,qword [our_gc]
+	mov	rdi,qword [disp]
+	call	XFreeGC
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+points		dw	70,10, 80,10, 70,20, 70,10
+
+
+section '.bss' writeable
+
+disp		rq	1
+win		rq	1
+our_white_pixel	rq	1
+our_black_pixel	rq	1
+our_gc		rq	1
+		rq	1
+
+values		XGCValues		; structure from Xlib.inc
+timewait	timespec		; structure from linux_struc.inc

@@ -1,0 +1,3 @@
+#!/bin/bash
+tar -c * > fasm_amd64_linux64_samples.tar
+gzip -9 fasm_amd64_linux64_samples.tar

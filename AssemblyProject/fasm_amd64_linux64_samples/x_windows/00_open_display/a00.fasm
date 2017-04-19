@@ -1,0 +1,57 @@
+; find DISPLAY variable in environment, open DISPLAY, close DISPLAY
+
+format ELF64
+
+include '../../include/linux_def.inc'
+include '../../include/unistd64.inc'
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+
+
+;section '.bss'
+align 8
+disp		rq	1

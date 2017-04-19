@@ -1,0 +1,4 @@
+download asmutils, they are 32-bit utilities like chmod, cp, df, mount, swapon
+collection holds about 120 basic utilities which you can find in your /bin
+they are nasm specific, but are easy portable to FASM 64-bit
+www.asm.sourceforge.net/asmutils.html

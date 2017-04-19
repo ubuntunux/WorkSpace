@@ -1,0 +1,4 @@
+#!/bin/bash
+rm a00
+fasm a00.fasm a00
+chmod +x a00

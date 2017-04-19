@@ -1,0 +1,84 @@
+; fasm demonstration of sys_fork and execve
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	lea	r11,[msg_usage]
+	cmp	qword [rsp],1		; argc = number of arguments
+	jbe	error_msg_exit
+
+	mov	eax,sys_fork
+	syscall
+; return negative value when error
+; return 0 for child thread
+; return PID of child for parent
+	lea	r11,[msg00]
+	or	rax,rax
+	js	error_msg_exit
+	jnz	parent_thread
+
+child_thread:
+	mov	rcx,qword [rsp+8*0]	; argc
+	lea	rdx,[rsp+8 + rcx*8 + 8]	; envinronment
+					; rsp+8 point to first argument
+					; rax*8 number of arguments
+					; +8 qword after args is 0-terminator
+	lea	rsi,[rsp+8*2]		; arg after ./executable_name if any
+	mov	rdi,qword [rsp+8*2]	; ./executable_name
+	mov	eax,sys_execve
+	syscall
+; see:
+; man execve
+
+; We went here only if error had occured when sys_execve.
+; If success, new process overwrite memory image with its own and
+; it will have to terminate itself by it's own sys_exit.
+	lea	r11,[msg01]
+	jmp	error_msg_exit
+
+parent_thread:
+	lea	rax,[msg00]
+	call	wzts_std
+
+exit0:	xor	edi,edi		; exit code 0
+exit:	mov	eax,sys_exit
+	syscall
+
+error_msg_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+exit1:	mov	edi,1		; exit code
+	jmp	exit
+
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+include '../../include/hexa_data_small.inc'; data for hexadecimal transformation
+
+msg_usage	db	'usage:',0Ah
+		db	'./a03 [path]executable_name',0Ah,7,0
+msg00		db	0Ah,'We have created new process '
+		db	'and we are terminating now.',0Ah,0
+msg01		db	'Error when execve!',0Ah,7,0
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+; this buffer is allocated statically = has certain unchangeable static size

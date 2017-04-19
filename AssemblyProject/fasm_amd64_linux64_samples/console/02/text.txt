@@ -1,0 +1,1 @@
+Sample sentence to be written to a file.

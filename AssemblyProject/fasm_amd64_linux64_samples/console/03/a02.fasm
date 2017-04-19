@@ -1,0 +1,116 @@
+; fasm demonstration of sys_fork and process interaction
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	mov	eax,sys_fork
+	syscall
+; return negative value when error
+; return 0 for child thread
+; return PID of child for parent
+	lea	r11,[msg00]
+	or	rax,rax
+	js	error_msg_exit
+	jnz	parent_thread
+
+child_thread:
+	lea	rax,[msg01]
+	call	wzts_std
+child_stop:
+	jmp	$		; = jmp child_stop
+				; we don't have here ususal sys_exit syscall
+				; because demonstration of parent's control
+				; over child
+				; this violating stop wastes CPU until parent
+				; kill child which may be done in milliseconds
+				; even it is very very very unprobable, parent
+				; may fail killing child (then it'll notify you)
+				; then please try
+				; ps -A
+				; find pid of process a02 at the end of list
+				; kill number_of_process
+
+parent_thread:
+	mov	r12,rax		; save rax = child's PID
+	lea	rax,[msg02]
+	call	wzts_std
+
+	mov	esi,SIGKILL
+	mov	rdi,r12		; you can use rdi=0, rdi=-1, see manuals
+	mov	eax,sys_kill	; see /usr/share/man/man2/kill.2.gz
+	syscall
+
+	xor	r10,r10
+	xor	edx,edx
+	lea	rsi,[process_status]
+	mov	rdi,r12
+	mov	eax,sys_wait4	; see: man wait4
+	syscall
+
+	mov	rax,qword [process_status]
+	lea	r11,[msg04]
+	cmp	ax,00h shl 8 + SIGKILL
+	jnz	error_msg_exit
+
+	lea	rax,[msg03]
+	call	wzts_std
+
+exit0:	xor	edi,edi		; exit code 0
+exit:	mov	eax,sys_exit
+	syscall
+
+error_msg_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+exit1:	mov	edi,1
+	jmp	exit
+
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+align 16
+include '../../include/d1ch64.inc'	; routine for write 1 byte to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+include '../../include/hexa_data_small.inc'; data for hexadecimal transformation
+
+msg00		db	'Error'
+space_char	db	' '
+		db	'when sys_fork!'
+new_line	db	0Ah
+		db	7,0
+msg01		db	"Hello, it's child process speaking to you.",0Ah
+		db	"I'm waiting here in an infinite loop (jmp $) "
+		db	'to be killed by parent process.',0Ah,0
+msg02		db	"Hello, it's parent process speaking to you, "
+		db	"I'm going to kill my child process.",0Ah
+		db	'I have just sent SIGKILL signal to my child process.'
+		db	0Ah
+		db	"Now I'm waiting until child die.",0Ah,0
+msg03		db	"I have just received child's SIGKILL signal, it means "
+		db	'child was killed.',0Ah,0
+msg04		db	'Something went wrong when waiting to the child death!'
+		db	0Ah,7,0		; 7 is beep (bell)
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+; this buffer is allocated statically = has certain unchangeable static size
+
+align 16
+process_status	rq	1

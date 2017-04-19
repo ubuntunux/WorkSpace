@@ -1,0 +1,263 @@
+; display bitmap, handle x-window events, get keyboard input
+; press ESC for exit
+
+format ELF64
+
+include '../../include/X.inc'		; x windows defines
+include '../../include/Xlib.inc'	; x windows structures
+include '../../include/keysymdef.inc'	; keyboard codes
+include '../../include/linux_def.inc'	; linux defines
+include '../../include/linux_struc.inc'	; linux structures
+include '../../include/unistd64.inc'	; syscall numbers
+
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCreateSimpleWindow
+ extrn XMapWindow
+ extrn XSync
+ extrn XCreateGC
+ extrn XSelectInput
+ extrn XNextEvent
+ extrn XKeycodeToKeysym
+ extrn XReadBitmapFile
+ extrn XCopyPlane
+ extrn XFlush
+ extrn XFreeGC
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+virtual at 0
+xdisp	XPrivDisplay			; structure from Xlib.inc file
+end virtual
+
+	mov	edx,dword [rax + xdisp.default_screen]	; XDisplay.default_screen
+	mov	rsi,qword [rax + xdisp.screens]
+	lea	rdi,[rsi + rdx*8]
+; RDI is pointing to the Screen structure
+	mov	qword [screen],rsi
+
+black		=	00000000h
+red		=	00FF0000h
+green		=	0000FF00h
+blue		=	000000FFh
+yellow		=	red or green
+purple		=	red or blue
+white		=	red or green or blue
+
+win_width	=	150
+win_height	=	100
+
+virtual at 0
+scr	Screen			; structure from Xlib.inc file
+end virtual
+
+	mov	rcx,qword [rdi + scr.white_pixel]
+	mov	rdx,qword [rdi + scr.black_pixel]
+	mov	qword [rsp+8*2],rcx	; background
+	mov	qword [rsp+8*1],rdx	; border
+	mov	qword [rsp+8*0],4	; border_width
+	mov	r9d,win_height		; height
+	mov	r8d,win_width		; width
+	xor	ecx,ecx			; y top-left outside corner of the window
+	xor	edx,edx			; x top-left outside corner of the window
+	mov	rsi,qword [rdi + scr.root]	; Window parent
+	mov	qword [root],rsi
+	mov	rdi,qword [disp]	; display
+	call	XCreateSimpleWindow	; see: man XCreateSimpleWindow
+	mov	qword [win],rax 
+
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XMapWindow
+
+if FALSE=0
+	xor	esi,esi
+else
+	mov	rsi,FALSE
+end if
+	mov	rdi,qword [disp]
+	call	XSync
+
+virtual at 0
+gcval	XGCValues
+end virtual
+
+	mov	rsi,qword [screen]
+	lea	rcx,[values]
+	mov	r9,qword [rsi + scr.black_pixel]
+	mov	r8,qword [rsi + scr.white_pixel]
+	mov	qword [rcx + gcval.foreground],r9
+	mov	qword [rcx + gcval.background],r8
+	mov	edx,GCBackground or GCForeground	; valuemask
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XCreateGC
+	mov	qword [our_gc],rax
+
+if FALSE=0
+	xor	esi,esi
+else
+	mov	rsi,FALSE
+end if
+	mov	rdi,qword [disp]
+	call	XSync
+
+; main work
+	lea	rcx,[bitmap_y_hot]
+	lea	rdx,[bitmap_x_hot]
+	mov	qword [rsp+8*1],rcx
+	mov	qword [rsp+8*0],rdx
+	lea	r9,[bitmap]
+	lea	r8,[bitmap_height]
+	lea	rcx,[bitmap_width]
+	lea	rdx,[bitmap_FileName]
+	mov	rsi,qword [root]
+	mov	rdi,qword [disp]
+	call	XReadBitmapFile
+	lea	r11,[msg02]
+	or	rax,rax
+	jnz	error_exit
+
+	call	CopyPlane_proc
+
+	mov	edx,KeyPressMask or ExposureMask
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XSelectInput
+
+virtual at 0
+xae	XAnyEvent
+end virtual
+
+event_loop:
+	lea	rsi,[event]
+	mov	rdi,qword [disp]
+	call	XNextEvent
+	lea	rax,[event]
+	mov	ecx,dword [rax + xae.type]
+	cmp	ecx,Expose
+	jz	ExposeEvent_proc
+	cmp	ecx,KeyPress
+	jz	KeyPress_proc
+	jmp	event_loop
+
+ExposeEvent_proc:
+; see:
+; man XExposeEvent
+; /usr/X11R6/man/man3/XExposeEvent.3x.gz
+
+virtual at 0
+xee	XExposeEvent
+end virtual
+
+	cmp	dword [rax + xee.count],0
+	jnz	event_loop
+
+	call	CopyPlane_proc
+	jmp	event_loop
+
+KeyPress_proc:
+
+virtual at 0
+xkpe	XKeyEvent
+end virtual
+
+	xor	edx,edx
+	mov	esi,dword [rax + xkpe.keycode]
+	mov	rdi,qword [disp]
+	call	XKeycodeToKeysym
+
+	cmp	eax,XK_Escape
+	jnz	event_loop
+
+	mov	rsi,qword [our_gc]
+	mov	rdi,qword [disp]
+	call	XFreeGC
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+align 8
+CopyPlane_proc:
+	sub	rsp,8*6
+	mov	qword [rsp+8*4],1
+	mov	qword [rsp+8*3],(win_height - bitmap_y) / 2
+	mov	qword [rsp+8*2],(win_width - bitmap_x) / 2
+	mov	rcx,qword [bitmap_height]
+	mov	rdx,qword [bitmap_width]
+	mov	qword [rsp+8*1],rcx
+	mov	qword [rsp+8*0],rdx
+	xor	r9,r9
+	xor	r8,r8
+	mov	rcx,qword [our_gc]
+	mov	rdx,qword [win]
+	mov	rsi,qword [bitmap]
+	mov	rdi,qword [disp]
+	call	XCopyPlane
+	add	rsp,8*6
+	ret
+
+align 8
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+msg02		db	"Something went wrong, check the bitmap file!",0Ah,0
+bitmap_FileName	db	'escherknot.xbm',0
+bitmap_x	=	64
+bitmap_y	=	54
+
+
+section '.bss' writeable
+
+disp		rq	1
+screen		rq	1
+root		rq	1
+win		rq	1
+our_gc		rq	1
+		rq	1
+
+bitmap		rq	1
+bitmap_width	rq	1
+bitmap_height	rq	1
+bitmap_x_hot	rq	1
+bitmap_y_hot	rq	1
+		rq	1
+
+event		XAnyEvent
+
+values		XGCValues		; structure from Xlib.inc

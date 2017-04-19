@@ -1,0 +1,238 @@
+; create a simple window with new cursor loaded from file
+
+format ELF64
+
+include '../../include/X.inc'		; x windows defines
+include '../../include/Xlib.inc'	; x windows structures
+include '../../include/linux_def.inc'	; linux defines
+include '../../include/linux_struc.inc'	; linux structures
+include '../../include/unistd64.inc'	; syscall numbers
+
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCreateSimpleWindow
+ extrn XReadBitmapFile
+ extrn XDefaultColormap
+ extrn XAllocColor
+ extrn XCreatePixmapCursor
+ extrn XDefineCursor
+ extrn XMapWindow
+ extrn XFlush
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+virtual at 0
+xdisp	XPrivDisplay			; structure from Xlib.inc file
+end virtual
+
+	mov	edx,dword [rax + xdisp.default_screen]	; XDisplay.default_screen
+	mov	rsi,qword [rax + xdisp.screens]
+	lea	rdi,[rsi + rdx*8]
+	mov	qword [scr_num],rdx
+	mov	qword [scr_addr],rdi
+; RDI is pointing to the Screen structure
+
+black		=	00000000h
+red		=	00FF0000h
+green		=	0000FF00h
+blue		=	000000FFh
+yellow		=	red or green
+purple		=	red or blue
+white		=	red or green or blue
+
+win_width	=	200
+win_height	=	100
+
+virtual at 0
+scr	Screen			; structure from Xlib.inc file
+end virtual
+
+	mov	rcx,qword [rdi + scr.white_pixel]
+	mov	rdx,qword [rdi + scr.black_pixel]
+	mov	qword [rsp+8*2],rcx	; background
+	mov	qword [rsp+8*1],rdx	; border
+	mov	qword [rsp+8*0],4	; border_width
+	mov	r9d,win_height		; height
+	mov	r8d,win_width		; width
+	xor	ecx,ecx			; y top-left outside corner of the window
+	xor	edx,edx			; x top-left outside corner of the window
+	mov	rsi,qword [rdi + scr.root]	; Window parent
+	mov	qword [root],rsi
+	mov	rdi,qword [disp]	; display
+	call	XCreateSimpleWindow	; see: man XCreateSimpleWindow
+	mov	qword [win],rax 
+
+	lea	rcx,[bitmap_y_hot]
+	lea	rdx,[bitmap_x_hot]
+	mov	qword [rsp+8*1],rcx
+	mov	qword [rsp+8*0],rdx
+	lea	r9,[bitmap]
+	lea	r8,[bitmap_height]
+	lea	rcx,[bitmap_width]
+	lea	rdx,[bitmap_file_name]
+	mov	rsi,qword [root]
+	mov	rdi,qword [disp]
+	call	XReadBitmapFile
+	or	rax,rax
+	lea	r11,[msg02]
+	jnz	error_exit
+
+	lea	rcx,[bitmap_mask_y_hot]
+	lea	rdx,[bitmap_mask_x_hot]
+	mov	qword [rsp+8*1],rcx
+	mov	qword [rsp+8*0],rdx
+	lea	r9,[bitmap_mask]
+	lea	r8,[bitmap_mask_height]
+	lea	rcx,[bitmap_mask_width]
+	lea	rdx,[bitmap_mask_file_name]
+	mov	rsi,qword [root]
+	mov	rdi,qword [disp]
+	call	XReadBitmapFile
+	or	rax,rax
+	lea	r11,[msg02]
+	jnz	error_exit
+
+; see ../04_color/a00.fasm for color operations
+	mov	rsi,qword [scr_num]
+	mov	rdi,qword [disp]
+	call	XDefaultColormap	; see: man XDefaultColormap
+	mov	qword [our_cmap],rax
+
+virtual at 0
+xk010r	XColor				; structure from Xlib.inc
+end virtual
+
+; the background color is used for pixels set to 0 in the source
+; we prepare white color
+	mov	ax,0FFFFh
+	lea	rdx,[background_color]
+	mov	word [rdx + xk010r.red],ax
+	mov	word [rdx + xk010r.green],ax
+	mov	word [rdx + xk010r.blue],ax
+	mov	rsi,qword [our_cmap]
+	mov	rdi,qword [disp]
+	call	XAllocColor		; see: man XAllocColor
+	lea	r11,[msg03]
+	or	rax,rax
+	jz	error_exit
+
+; the foreground color is used for pixels set to 1 in the source
+; we prepare black color
+	xor	eax,eax
+	lea	rdx,[foreground_color]
+	mov	word [rdx + xk010r.red],ax
+	mov	word [rdx + xk010r.green],ax
+	mov	word [rdx + xk010r.blue],ax
+	mov	rsi,qword [our_cmap]
+	mov	rdi,qword [disp]
+	call	XAllocColor		; see: man XAllocColor
+	lea	r11,[msg03]
+	or	rax,rax
+	jz	error_exit
+
+	mov	rax,qword [bitmap_y_hot]
+	mov	qword [rsp+8*0],rax
+	mov	r9,qword [bitmap_x_hot]
+	lea	r8,[background_color]
+	lea	rcx,[foreground_color]
+	mov	rdx,qword [bitmap_mask]
+	mov	rsi,qword [bitmap]
+	mov	rdi,qword [disp]
+	call	XCreatePixmapCursor
+
+	mov	rdx,rax
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDefineCursor
+
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XMapWindow
+
+	mov	rdi,qword [disp]
+	call	XFlush
+
+virtual at 0
+time	timespec
+end virtual
+
+	xor	esi,esi
+	lea	rdi,[timewait]
+	mov	qword [rdi + time.tv_sec],7		; wait 7 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep
+	syscall
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+msg02		db	'Something went wrong, check the bitmap file.',0Ah,0
+msg03		db	"Can't allocate color!",0Ah,0
+
+bitmap_file_name	db	'hand2.xbm',0
+bitmap_mask_file_name	db	'hand2_mask.xbm',0
+
+
+section '.bss' writeable
+
+disp			rq	1
+scr_num			rq	1
+scr_addr		rq	1
+win			rq	1
+root			rq	1
+our_cmap		rq	1
+
+bitmap			rq	1
+bitmap_width		rq	1
+bitmap_height		rq	1
+bitmap_x_hot		rq	1
+bitmap_y_hot		rq	1
+
+bitmap_mask		rq	1
+bitmap_mask_width	rq	1
+bitmap_mask_height	rq	1
+bitmap_mask_x_hot	rq	1
+bitmap_mask_y_hot	rq	1
+
+foreground_color	XColor		; structure from Xlib.inc
+background_color	XColor
+
+timewait		timespec	; structure from linux_struc.inc

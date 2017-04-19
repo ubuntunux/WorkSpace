@@ -1,0 +1,203 @@
+; write a text
+
+format ELF64
+
+include '../../include/X.inc'		; x windows defines
+include '../../include/Xlib.inc'	; x windows structures
+include '../../include/linux_def.inc'	; linux defines
+include '../../include/linux_struc.inc'	; linux structures
+include '../../include/unistd64.inc'	; syscall numbers
+
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCreateSimpleWindow
+ extrn XMapWindow
+ extrn XSync
+ extrn XCreateGC
+ extrn XLoadQueryFont
+ extrn XSetFont
+ extrn XDrawString
+ extrn XFlush
+ extrn XFreeFont
+ extrn XFreeGC
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+virtual at 0
+xdisp	XPrivDisplay			; structure from Xlib.inc file
+end virtual
+
+	mov	edx,dword [rax + xdisp.default_screen]	; XDisplay.default_screen
+	mov	rsi,qword [rax + xdisp.screens]
+	lea	rdi,[rsi + rdx*8]
+; RDI is pointing to the Screen structure
+
+black		=	00000000h
+red		=	00FF0000h
+green		=	0000FF00h
+blue		=	000000FFh
+yellow		=	red or green
+purple		=	red or blue
+white		=	red or green or blue
+
+win_width	=	210
+win_height	=	100
+
+virtual at 0
+scr	Screen			; structure from Xlib.inc file
+end virtual
+
+	mov	rcx,qword [rdi + scr.white_pixel]
+	mov	rdx,qword [rdi + scr.black_pixel]
+	mov	qword [our_white_pixel],rcx
+	mov	qword [our_black_pixel],rdx
+	mov	qword [rsp+8*2],rcx	; background
+					; or try mov ...,purple
+	mov	qword [rsp+8*1],rdx	; border
+	mov	qword [rsp+8*0],4	; border_width
+	mov	r9d,win_height		; height
+	mov	r8d,win_width		; width
+	xor	ecx,ecx			; y top-left outside corner of the window
+	xor	edx,edx			; x top-left outside corner of the window
+	mov	rsi,qword [rdi + scr.root]	; Window parent
+	mov	rdi,qword [disp]	; display
+	call	XCreateSimpleWindow	; see: man XCreateSimpleWindow
+	mov	qword [win],rax 
+
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XMapWindow
+
+if FALSE=0
+	xor	esi,esi
+else
+	mov	rsi,FALSE
+end if
+	mov	rdi,qword [disp]
+	call	XSync
+
+virtual at 0
+gcval	XGCValues
+end virtual
+
+	mov	rax,qword [our_black_pixel]
+	lea	rcx,[values]
+	mov	qword [rcx + gcval.foreground],rax
+	mov	edx,GCForeground	; valuemask
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XCreateGC
+	mov	qword [our_gc],rax
+
+	lea	rsi,[font_name]
+	mov	rdi,qword [disp]
+	call	XLoadQueryFont
+	lea	r11,[msg02]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [our_font],rax
+
+virtual at 0
+xfnt	XFontStruct
+end virtual
+
+	mov	rdx,qword [rax + xfnt.fid]
+	mov	rsi,qword [our_gc]
+	mov	rdi,qword [disp]
+	call	XSetFont
+
+string_x	=	2
+string_y	=	40
+	mov	qword [rsp+8*0],string_size
+	lea	r9,[string_to_write]
+	mov	r8d,string_y
+	mov	ecx,string_x
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawString
+
+	mov	rdi,qword [disp]
+	call	XFlush
+
+virtual at 0
+time	timespec
+end virtual
+
+	xor	esi,esi
+	lea	rdi,[timewait]
+	mov	qword [rdi + time.tv_sec],4		; wait 4 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep
+	syscall
+
+	mov	rsi,qword [our_font]
+	mov	rdi,qword [disp]
+	call	XFreeFont
+
+	mov	rsi,qword [our_gc]
+	mov	rdi,qword [disp]
+	call	XFreeGC
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+msg02		db	'No such font found!',0Ah,0
+
+font_name	db	'*-helvetica-*-r-*-12-*',0
+		;db	'*-helvetica-*-r-*-*-12-*-*-*-*-*-iso8859-2',0
+		; try xfontsel for view fonts
+
+string_to_write	db	'Teba nezastavia, mas svoju vieru.'
+string_size	=	$ - string_to_write
+
+
+section '.bss' writeable
+
+disp		rq	1
+win		rq	1
+our_white_pixel	rq	1
+our_black_pixel	rq	1
+our_gc		rq	1
+our_font	rq	1
+
+values		XGCValues		; structure from Xlib.inc
+timewait	timespec		; structure from linux_struc.inc

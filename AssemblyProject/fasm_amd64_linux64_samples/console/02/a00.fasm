@@ -1,0 +1,125 @@
+; fasm demonstration of reading from STDIN, file operations, memory allocations
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	lea	rax,[msg00]
+	call	wzts_std
+
+	mov	edx,input_buffer_size
+	lea	rsi,[input_buffer]
+	mov	edi,STDIN
+	mov	eax,sys_read	; see /usr/share/man/man2/read.2.gz
+	syscall
+	mov	qword [input_size],rax
+	or	rax,rax
+	lea	rax,[msg_err00]
+	js	message_and_exit
+
+; now we have input buffer holding input text terminated with 0Ah ENTER char
+; unnecessary scanning of string size
+;	mov	al,0Ah			; input terminator
+;	mov	ecx,input_buffer_size	; maximal size
+;	lea	rdi,[input_buffer]
+;	lea	edx,[ecx-1]		; maximal size - 1
+;					; (without 0Ah at the end)
+;	cld
+;	repnz scasb
+;	sub	edx,ecx			; edx = input_size-1
+;					; (without 0Ah terminator)
+;	mov	qword [input_size],rdx
+
+; now we write buffer into file
+; 1. create file
+	mov	edx,110100100b		; permission
+;		    RW R  R
+;		    own			; owner Read and Write permission, no Execute permission
+;		       grp		; group Read permission, no Write, no Execute
+;		          oth		; others Read permission
+	mov	esi,O_RDWR or O_CREAT or O_TRUNC	; Read/Write flag,
+					; create new file, truncate it if exists
+	lea	rdi,[filename]
+	mov	eax,sys_open	; see /usr/share/man/man2/open.2.gz
+	syscall
+	mov	qword [file_handle],rax
+	or	rax,rax
+	lea	rax,[msg_err01]
+	js	message_and_exit
+
+	mov	rdx,qword [input_size]
+	lea	rsi,[input_buffer]
+	mov	rdi,qword [file_handle]
+	mov	eax,sys_write	; see /usr/share/man/man2/write.2.gz
+	syscall
+	mov	rbx,rax		; save written size to register preserved
+				; accross function call
+
+	mov	rdi,qword [file_handle]
+	mov	eax,sys_close	; see /usr/share/man/man2/write.2.gz
+	syscall
+	or	rax,rax
+	lea	rax,[msg_err03]
+	js	message_and_exit
+
+	or	rbx,rbx
+	lea	rax,[msg_err02]
+	js	message_and_exit
+
+	xor	edi,edi		; exit code 0
+	mov	eax,sys_exit
+	syscall
+
+message_and_exit:
+	call	wzts_std
+
+	mov	edi,1		; exit code 1
+	mov	eax,sys_exit
+	syscall
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+msg00		db	'Write something and then press ENTER to end of input.'
+		db	0Ah,"But don't type more than "
+
+c=1000000000000				; number big enough
+while c<>0				; until c isn't zero
+	if	input_buffer_size > c
+		db	((input_buffer_size/c) mod 10) + '0'
+	end if
+	c=c/10				; get next decimal digit of input_buffer_size
+end while
+
+		db	' characters (including terminal ENTER char)!',0Ah,0
+
+msg_err00	db	'Error read from STDIN!',0Ah,7,0	; 7 = beep char = bell
+msg_err01	db	'Error create file!',0Ah,7,0
+msg_err02	db	'Error write file!',0Ah,7,0
+msg_err03	db	'Error close file!',0Ah,7,0
+
+filename	db	'text.txt',0
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+; this buffer is allocated statically = has certain unchangeable static size
+input_buffer_size	=	1000h
+input_buffer		rb	input_buffer_size
+
+input_size		rq	1
+file_handle		rq	1

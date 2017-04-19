@@ -1,0 +1,2 @@
+#!/bin/bash
+./a03 ../01/a00 arg0 arg1 arg2 end_arg one_more_arg

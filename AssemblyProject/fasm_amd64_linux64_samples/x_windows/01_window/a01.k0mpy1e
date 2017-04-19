@@ -1,0 +1,7 @@
+#!/bin/bash
+rm a01
+rm a01.o
+fasm a01.fasm a01.o
+gcc a01.o -o a01 -L/usr/X11R6/lib64/ -lX11
+cp a01 a01_stripped
+strip a01_stripped

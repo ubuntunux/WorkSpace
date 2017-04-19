@@ -1,0 +1,147 @@
+; fasm demonstration of sys_iopl, sys_ioperm
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	mov	eax,sys_getuid	; see: man getuid
+	syscall
+	lea	r11,[msg00]
+	or	rax,rax
+	jnz	error_msg_exit
+
+; change iopl
+; see:
+; man iopl
+; /usr/src/linux/arch/x86_64/kernel/ioport.c
+	mov	edi,3
+	mov	eax,sys_iopl
+	syscall
+	lea	r11,[msg01]
+	or	rax,rax
+	jnz	error_msg_exit
+
+; try to look at rflags register under debugger, e.g. rflags=0000000000003302
+
+; privileged instructions:
+	cli
+	sti
+
+; change iopl back to 0
+	xor	edi,edi
+	mov	eax,sys_iopl
+	syscall
+	lea	r11,[msg01]
+	or	rax,rax
+	jnz	error_msg_exit
+
+; accessing ports 0000-03FF
+; we must set ioperm permission to access ports
+; for ports 0000-03FF this is done by sys_ioperm
+; for ports beyond 03FF (0400-FFFF) you must use sys_iopl
+	mov	edx,1		; 1 allow access to ports, 0 deny access
+	mov	esi,4		; number of ports
+	mov	edi,72h		; begin from port
+	mov	eax,sys_ioperm	; see: man ioperm
+	syscall
+	lea	r11,[msg02]
+	or	rax,rax
+	jnz	error_msg_exit
+
+	cld
+	xor	ebx,ebx
+	mov	ecx,extended_cmos_buffer_size
+	lea	rdi,[extended_cmos_buffer]
+AMDPad16
+L0:	mov	edx,72h		; note that read port may fail if
+				; e.g. dx=0072h, but edx=FFFF0072h
+	add	dl,bh
+	add	dl,bh
+	mov	al,bl
+	out	dx,al
+	inc	dx
+	insb			; privileged instruction for read from port
+	inc	ebx
+	loop	L0
+
+	xor	edx,edx		; 1 allow access to ports, 0 deny access
+	mov	esi,4		; number of ports
+	mov	edi,72h		; begin from port
+	mov	eax,sys_ioperm	; see: man ioperm
+	syscall
+	lea	r11,[msg02]
+	or	rax,rax
+	jnz	error_msg_exit
+
+; write buffer to a file
+	mov	edx,110100100b	; permission - user RW, group R, others R
+;		    RW R  R	; RWE = 111b read/write/executable
+	mov	esi,O_RDWR or O_CREAT or O_TRUNC
+	lea	rdi,[filename]
+	mov	eax,sys_open
+	syscall
+	lea	r11,[msg03]
+	or	rax,rax
+	js	error_msg_exit
+	mov	r12,rax		; save file handle
+
+	mov	edx,extended_cmos_buffer_size
+	lea	rsi,[extended_cmos_buffer]
+	mov	rdi,r12
+	mov	eax,sys_write
+	syscall
+	mov	rbx,rax		; save syscall return value
+
+	mov	rdi,r12
+	mov	eax,sys_close
+	syscall
+	lea	r11,[msg05]
+	or	rax,rax
+	jnz	error_msg_exit
+
+	lea	r11,[msg04]
+	or	rbx,rbx
+	jnz	error_msg_exit
+
+exit0:	xor	edi,edi		; exit code 0
+exit:	mov	eax,sys_exit
+	syscall
+
+error_msg_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+exit1:	mov	edi,1
+	jmp	exit
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+filename	db	'cmos_extended.bin',0
+
+msg00		db	'Need root privileges!',0Ah,0
+msg01		db	'sys_iopl fail!',0Ah,0
+msg02		db	'sys_ioperm fail!',0Ah,0
+msg03		db	'Error create file!',0Ah,0
+msg04		db	'Error write file!',0Ah,0
+msg05		db	'Error close file!',0Ah,0
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+extended_cmos_buffer_size	=	200h
+extended_cmos_buffer		rb	extended_cmos_buffer_size

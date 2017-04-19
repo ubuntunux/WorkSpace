@@ -1,0 +1,219 @@
+; colors (draw vertical lines with changed colors)
+
+format ELF64
+
+include '../../include/X.inc'		; x windows defines
+include '../../include/Xlib.inc'	; x windows structures
+include '../../include/linux_def.inc'	; linux defines
+include '../../include/linux_struc.inc'	; linux structures
+include '../../include/unistd64.inc'	; syscall numbers
+
+
+section '.text' executable
+
+ public main
+
+ extrn getenv
+ extrn XOpenDisplay
+ extrn XCreateSimpleWindow
+ extrn XMapWindow
+ extrn XSync
+ extrn XCreateGC
+ extrn XDefaultColormap
+ extrn XAllocColor
+ extrn XSetForeground
+ extrn XDrawLine
+ extrn XFlush
+ extrn XFreeGC
+ extrn XCloseDisplay
+
+
+ main:
+	lea	rdi,[display_name]
+	call	getenv
+	lea	r11,[msg00]
+	or	rax,rax
+	jz	error_exit
+
+	lea	rdi,[rax]
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+virtual at 0
+xdisp	XPrivDisplay			; structure from Xlib.inc file
+end virtual
+
+	mov	edx,dword [rax + xdisp.default_screen]	; XDisplay.default_screen
+	mov	rsi,qword [rax + xdisp.screens]
+	mov	qword [screen_num],rdx
+	lea	rdi,[rsi + rdx*8]
+; RDI is pointing to the Screen structure
+
+black		=	00000000h
+red		=	00FF0000h
+green		=	0000FF00h
+blue		=	000000FFh
+yellow		=	red or green
+purple		=	red or blue
+white		=	red or green or blue
+
+win_width	=	300
+win_height	=	200
+
+virtual at 0
+scr	Screen			; structure from Xlib.inc file
+end virtual
+
+	mov	rcx,qword [rdi + scr.white_pixel]
+	mov	rdx,qword [rdi + scr.black_pixel]
+	mov	qword [rsp+8*2],rcx	; background
+	mov	qword [rsp+8*1],rdx	; border
+	mov	qword [rsp+8*0],4	; border_width
+	mov	r9d,win_height		; height
+	mov	r8d,win_width		; width
+	xor	ecx,ecx			; y top-left outside corner of the window
+	xor	edx,edx			; x top-left outside corner of the window
+	mov	rsi,qword [rdi + scr.root]	; Window parent
+	mov	rdi,qword [disp]	; display
+	call	XCreateSimpleWindow	; see: man XCreateSimpleWindow
+	mov	qword [win],rax 
+
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XMapWindow
+
+if FALSE=0
+	xor	esi,esi
+else
+	mov	rsi,FALSE
+end if
+	mov	rdi,qword [disp]
+	call	XSync
+
+virtual at 0
+gcval	XGCValues
+end virtual
+
+	lea	rcx,[values]
+	mov	qword [rcx + gcval.line_width],1
+	mov	dword [rcx + gcval.line_style],LineSolid
+	mov	dword [rcx + gcval.cap_style],CapRound
+	mov	dword [rcx + gcval.join_style],JoinRound
+	mov	edx,GCJoinStyle or GCCapStyle or GCLineStyle or GCLineWidth
+					; valuemask
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XCreateGC
+	mov	qword [our_gc],rax
+
+; color
+	mov	rsi,qword [screen_num]
+	mov	rdi,qword [disp]
+	call	XDefaultColormap	; see: man XDefaultColormap
+	mov	qword [our_cmap],rax
+
+number_of_colors	=	win_width
+step_change_value	=	10000h / number_of_colors
+
+make_color_L0:
+
+virtual at 0
+xk010r	XColor					; structure from Xlib.inc
+end virtual
+
+	lea	rdx,[our_color]
+	mov	rax,qword [our_RGB]		; grab RGB and dummy at once
+	mov	qword [rdx + xk010r.red],rax	; set RGB and dummy at once
+	mov	rsi,qword [our_cmap]
+	mov	rdi,qword [disp]
+	call	XAllocColor			; see: man XAllocColor
+	lea	r11,[msg02]
+	or	rax,rax
+	jz	error_exit
+
+	mov	rdx,qword [our_color.pixel]
+	mov	rsi,qword [our_gc]
+	mov	rdi,qword [disp]
+	call	XSetForeground		; see: man XSetForeground
+
+	mov	qword [rsp+8*0],win_height
+	xor	r9d,dword [x_position]
+	xor	r8,r8
+	mov	ecx,dword [x_position]
+	mov	rdx,qword [our_gc]
+	mov	rsi,qword [win]
+	mov	rdi,qword [disp]
+	call	XDrawLine
+
+	add	word [our_R],step_change_value
+	sub	word [our_B],step_change_value
+	inc	dword [x_position]
+
+	dec	dword [counter]
+	jnz	make_color_L0
+
+	mov	rdi,qword [disp]
+	call	XFlush
+
+virtual at 0
+time	timespec
+end virtual
+
+	xor	esi,esi
+	lea	rdi,[timewait]
+	mov	qword [rdi + time.tv_sec],4		; wait 4 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep
+	syscall
+
+	mov	rsi,qword [our_gc]
+	mov	rdi,qword [disp]
+	call	XFreeGC
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name	db	'DISPLAY',0
+msg00		db	"There isn't 'DISPLAY' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+msg02		db	"Can't allocate color!",0Ah,0
+align 8
+counter		dd	number_of_colors, 0
+x_position	dd	0, 0
+our_RGB:
+our_R		dw	0
+our_G		dw	0
+our_B		dw	0FFFFh
+our_dummy	dw	0
+
+section '.bss' writeable
+
+disp		rq	1
+screen_num	rq	1
+win		rq	1
+our_gc		rq	1
+our_cmap	rq	1
+		rq	1
+
+values		XGCValues		; structure from Xlib.inc
+our_color	XColor
+timewait	timespec		; structure from linux_struc.inc

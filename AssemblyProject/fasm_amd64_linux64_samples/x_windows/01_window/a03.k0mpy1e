@@ -1,0 +1,7 @@
+#!/bin/bash
+rm a03
+rm a03.o
+fasm a03.fasm a03.o
+gcc a03.o -o a03 -L/usr/X11R6/lib64/ -lX11
+cp a03 a03_stripped
+strip a03_stripped

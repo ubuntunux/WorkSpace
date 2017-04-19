@@ -1,0 +1,66 @@
+; fasm demonstration of sys_fork, see:
+; man fork
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	mov	eax,sys_fork
+	syscall
+; return negative value when error
+; return 0 for child thread
+; return PID of child for parent
+	lea	r11,[msg00]
+	or	rax,rax
+	js	error_msg_exit
+	jnz	parent_thread
+
+child_thread:
+	lea	rax,[msg01]
+	call	wzts_std
+
+	jmp	exit0
+
+parent_thread:
+	lea	rax,[msg02]
+	call	wzts_std
+
+exit0:	xor	edi,edi		; exit code 0
+exit:	mov	eax,sys_exit
+	syscall
+
+error_msg_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+exit1:	mov	edi,1
+	jmp	exit
+
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+msg00		db	'Error'
+space_char	db	' '
+		db	'when sys_fork!'
+new_line	db	0Ah
+		db	7,0
+msg01		db	'Hello from child process.',0Ah,0
+msg02		db	'Hello from parent process.',0Ah,0
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data

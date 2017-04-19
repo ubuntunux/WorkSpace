@@ -1,0 +1,71 @@
+; find DISPLAY variable in environment, open DISPLAY, close DISPLAY
+; we find variable in environment handy, without using of call getenv
+
+format ELF64
+
+include '../../include/linux_def.inc'
+include '../../include/unistd64.inc'
+
+section '.text' executable
+
+ public main
+
+ extrn XOpenDisplay
+ extrn XCloseDisplay
+
+
+ main:
+
+; after loading libraries, we come here with
+; rdi=argc
+; rsi=argv
+; rdx=envp
+
+	lea	r11,[msg00]
+	mov	eax,-1
+	cld
+scan_env:
+	inc	eax
+	mov	rdi,qword [rdx+rax*8]	; get next variable from environment
+	or	rdi,rdi
+	jz	error_exit
+	lea	rsi,[display_name]
+	mov	ecx,display_name_size
+	repz cmpsb
+	jnz	scan_env
+
+; RDI is now pointing to desired variable, typically it looks like :0.0
+	call	XOpenDisplay
+	lea	r11,[msg01]
+	or	rax,rax
+	jz	error_exit
+	mov	qword [disp],rax
+
+	mov	rdi,qword [disp]
+	call	XCloseDisplay
+
+exit0:	xor	edi,edi
+exit:	mov	eax,sys_exit
+	syscall
+
+error_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+	mov	edi,1
+	jmp	exit
+
+include	'../../include/dzts64.inc'
+
+
+section '.data' writeable
+
+display_name		db	'DISPLAY='
+display_name_size	=	$ - display_name
+msg00		db	"There isn't 'DISPLAY=' variable in environment!",0Ah,0
+msg01		db	"Can't connect to X Server!",0Ah,0
+
+
+;section '.bss'
+align 8
+disp		rq	1

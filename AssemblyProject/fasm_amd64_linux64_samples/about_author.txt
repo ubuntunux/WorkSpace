@@ -1,0 +1,8 @@
+Linux64 AMD64 FASM samples written by Feryno. Compiled with FASM 1.66
+
+http://flatassembler.net
+http://board.flatassembler.net
+
+debugger and other stuff:
+http://feryno.host.sk
+It's a freehosting, may be off, then try www.google.com with keyword Feryno.

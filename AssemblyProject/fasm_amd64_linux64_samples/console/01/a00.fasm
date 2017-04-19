@@ -1,0 +1,167 @@
+; demonstration of raw ELF64 header
+; demonstration of parsing command line arguments and environment
+; demonstration of sys_nanosleep
+; we will create one segment holding code+data+unitialized_data together
+; note that linux from kernel 2.6.??? needs last segment to be writeable,
+; else segmentation fault is generated
+; compiled with FASM 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/linux_struc.inc'		; linux structures
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+use64						; FASM compile 64-bit code
+
+org	00000000100000000h			; we are on new AMD64 platform,
+						; so we put image
+						; over old 32-bit limit !!!
+
+						; Elf64_Ehdr
+
+						;   e_ident	ELF identification
+		db	7Fh, 'ELF'		; magic number
+		db	2			; EI_CLASS (1 for 32-bit, 2 for 64-bit objects)
+		db	1			; EI_DATA encoding (1 little-endian, 2 big-endian)
+		db	1			; EI_VERSION (has the value EV_CURRENT, which is defined with the value 1)
+		db	0			; EI_OSABI
+		db	0			; EI_ABIVERSION
+	times 7	db 0
+
+		dw	2			;   e_type	Object file type (ET_EXEC 2 Executable file)
+		dw	3Eh			;   e_machine	Machine type
+		dd	1			;   e_version	Object file version
+		dq	START			;   e_entry	Entry point address
+		dq	phdr - $$		;   e_phoff	Program header offset
+		dq	0			;   e_shoff	Section header offset
+		dd	0			;   e_flags	Processor-specific flags
+		dw	ehdrsize		;   e_ehsize	ELF header size
+		dw	phdrsize		;   e_phentsize	Size of program header entry
+		dw	1			;   e_phnum	Number of program header entries
+						; we have 1 entry only: program header
+		dw	40h			;   e_shentsize	Size of section header entry
+		dw	0			;   e_shnum	Number of section header entries
+		dw	0			;   e_shstrndx	Section name string table index
+ehdrsize	=	$ - $$
+
+phdr:						; Elf64_Phdr	program header
+		dd	1			;   p_type	PT_LOAD 1 Loadable segment
+		dd	111b			;   p_flags
+;			RWE			;Read,Write,Exec
+; PF_X 001b Execute permission, PF_W 010b Write permission, PF_R 100b Read permission
+; in old 32 bit it was EWR: Execute 100b, Write 010b, Read 001b and flags are at the end of program header
+; We use data segment and code segment mixed together.
+; So if we want to make datasegment writeable, we must make the whole segment
+; (code+data) readable + writeable + executable.
+; This has the feature that self modifying is possible (doesn't make
+; segmentation error)
+; Another way is to change segment flags by syscall sys_mprotect, see:
+; http://linuxassembly.org/articles/smc.html
+; man mprotect
+
+		dq	beg_of_work - $$	;   p_offset
+		dq	beg_of_work		;   p_vaddr
+		dq	beg_of_work		;   p_paddr
+		dq	filesize		;   p_filesz
+		dq	memsize			;   p_memsz
+
+		dq	1000h			;   p_align
+phdrsize	=	$ - phdr
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; code
+
+beg_of_work:
+
+START:
+
+; [rsp+8*0]=N		argc number of arguments
+; [rsp+8*1]		argv0 name of executable (e.g. ./a00)
+; [rsp+8*2]		argv1 (if any) - 1st param after name of executable
+; ...
+; [rsp+8*N]		argvN - Nth param
+; qword [rsp+8*(N+1)]=0	end of arguments
+; [rsp+8*(N+2)]		envp environment
+; ...
+; qword [rsp+....]=0	end of environment
+
+	lea	rax,[disp_msg0]
+	call	wzts_std	; write 0-terminated string to standard output
+
+	xor	r12,r12		; counter for displayed arg
+	jmp	L1
+AMDPad16			; macro from included macros file
+L0:	lea	rax,[disp_space]
+	call	w1ch_std
+L1:	inc	r12
+	mov	rax,qword [rsp + r12*8]
+	call	wzts_std	; write 0-terminated string to standard output
+	cmp	qword [rsp],r12	; compare displayed arg with number of args
+	jnbe	L0
+	lea	rax,[disp_new_line]
+	call	w1ch_std
+
+	lea	rax,[disp_msg1]
+	call	wzts_std
+
+AMDPad16
+env_start:
+	mov	rax,qword [rsp + r12*8 + 8*2]	; environment
+	or	rax,rax
+	jz	env_done
+	call	wzts_std
+	lea	rax,[disp_space]
+	call	w1ch_std
+	inc	r12
+	jmp	env_start
+env_done:
+
+	lea	rax,[disp_new_line]
+	call	w1ch_std
+
+virtual at 0
+time		timespec	; structure from included linux_struc.inc file
+end virtual
+	lea	rsi,[timespec_remain]
+	lea	rdi,[timespec_wait]
+	mov	qword [rdi + time.tv_sec],2		; 2 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep	; see: man nanosleep
+	syscall
+
+	xor	edi,edi
+	mov	eax,sys_exit
+	syscall
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+align 16
+include '../../include/d1ch64.inc'	; routine for write 1 byte to STDOUT
+
+padnum16zero				; macro from included macros file
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; data
+
+disp_msg0	db	'shell'
+disp_space	db	' '
+		db	'line:'
+disp_new_line	db	0Ah
+		db	0
+disp_msg1	db	'environment:',0Ah,0
+
+filesize	=	$ - beg_of_work	; in old 32 bit it was different: $ - $$ (= as in 64 bit + header size)
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+timespec_wait	timespec	; structure from included linux_struc.inc file
+timespec_remain	timespec
+
+bsssize		=	$ - $$
+memsize		=	filesize+bsssize

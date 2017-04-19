@@ -1,0 +1,14 @@
+inspired by this 32-bit samples:
+http://www.rag.kgb.pl/zip/XProg_asm_by_Nekro.tar.gz
+
+look into:
+/usr/X11R6/include/X11/X.h
+/usr/X11R6/include/X11/Xlib.h
+/usr/X11R6/include/X11/Xutil.h
+/usr/X11R6/include/X11/keysymdef.h
+/usr/X11R6/man/man3/
+
+man XCreateWindow
+man ...
+
+compiled with fasm 1.66

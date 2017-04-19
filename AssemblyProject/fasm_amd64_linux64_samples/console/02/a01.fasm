@@ -1,0 +1,106 @@
+; fasm demonstration of file operations, memory allocations
+; here we allocate memory = file_size by sys_mmap
+; If you want to allocate memory only (without mapping file to it),
+; just use 5th sys_mmap param = 0 instead of fd (xor r8,r8).
+; Another choice is to static allocate uninitialized data (after data) large
+; enough, e.g. several megabytes. Don't wory, it don't waste nor memory neither
+; swap file until you really fill memory from file by its reading.
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	mov	esi,O_RDONLY
+	lea	rdi,[filename]
+	mov	eax,sys_open
+	syscall
+	mov	qword [file_handle],rax
+	or	rax,rax
+	lea	rax,[msg_err00]
+	js	message_and_exit
+
+	mov	edx,SEEK_END
+	xor	esi,esi
+	mov	rdi,qword [file_handle]
+	mov	eax,sys_lseek
+	syscall
+	mov	qword [file_size],rax
+	or	rax,rax
+	lea	rax,[msg_err01]
+	js	close_and_message_and_exit
+
+	xor	r9,r9
+	mov	r8,qword [file_handle]
+	mov	r10,MAP_PRIVATE
+	mov	edx,PROT_READ
+	mov	rsi,qword [file_size]
+	xor	edi,edi
+	mov	eax,sys_mmap
+	syscall
+	mov	qword [buff_addr],rax
+	or	rax,rax
+	lea	rax,[msg_err03]
+	js	close_and_message_and_exit
+
+	mov	rdx,qword [file_size]
+	mov	rsi,qword [buff_addr]
+	mov	edi,STDOUT
+	mov	eax,sys_write
+	syscall
+
+	mov	rdi,qword [file_handle]
+	mov	eax,sys_close
+	syscall
+	or	rax,rax
+	lea	rax,[msg_err03]
+	js	message_and_exit
+
+	xor	edi,edi		; exit code 0
+	mov	eax,sys_exit
+	syscall
+
+close_and_message_and_exit:
+	mov	rbx,rax		; save RAX
+	mov	rdi,qword [file_handle]
+	mov	eax,sys_close
+	syscall
+	mov	rax,rbx		; restore RAX
+
+message_and_exit:
+	call	wzts_std
+
+	mov	edi,1		; exit code 1
+	mov	eax,sys_exit
+	syscall
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+msg_err00	db	'Error create file!',0Ah,7,0
+msg_err01	db	'Error seek in file!',0Ah,7,0
+msg_err02	db	'Error close file!',0Ah,7,0
+msg_err03	db	'Error sys_mmap!',0Ah,7,0
+
+filename	db	'text.txt',0
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+input_size		rq	1
+file_handle		rq	1
+file_size		rq	1
+buff_addr		rq	1
+
+;file_buff		rb	16*1024*1024	; example of static memory allocation

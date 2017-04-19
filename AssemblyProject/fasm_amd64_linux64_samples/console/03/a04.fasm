@@ -1,0 +1,117 @@
+; fasm demonstration of displaying startup registers
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+start:	pushf
+	push	rax			; this will be overwriten to RIP
+	push	r15
+	push	r14
+	push	r13
+	push	r12
+	push	r11
+	push	r10
+	push	r9
+	push	r8
+	push	rdi
+	push	rsi
+	push	rbp
+	push	rsp
+	push	rdx
+	push	rcx
+	push	rbx
+	push	rax
+	lea	rax,[start]
+	mov	qword [rsp + 8*16],rax	; overwrite it to RIP at start
+	add	qword [rsp + 8*4],8*13	; correct RSP to value at start
+
+	xor	r15,r15			; counter
+	mov	word [buf + 16],000Ah	; new line and 0-terminator
+
+display_regs:
+	lea	rdx,[reg_addresses]
+	mov	rax,qword [rdx+r15*8]
+	call	wzts_std
+	pop	rax
+	lea	rdi,[buf]
+	call	hexa64_rax
+	lea	rax,[rdi]
+	call	wzts_std
+	inc	r15
+	cmp	r15d,num_of_regs
+	jc	display_regs
+
+	xor	edi,edi
+	mov	eax,sys_exit
+	syscall
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+align 16
+include '../../include/hexa_proc.inc'	; routine for hexadecimal transformations
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+include '../../include/hexa_data.inc'; data for hexadecimal transformation
+
+reg_addresses:
+		dq	reg_rax
+		dq	reg_rbx
+		dq	reg_rcx
+		dq	reg_rdx
+		dq	reg_rsp
+		dq	reg_rbp
+		dq	reg_rsi
+		dq	reg_rdi
+		dq	reg_r8
+		dq	reg_r9
+		dq	reg_r10
+		dq	reg_r11
+		dq	reg_r12
+		dq	reg_r13
+		dq	reg_r14
+		dq	reg_r15
+		dq	reg_rip
+		dq	reg_rflags
+num_of_regs	=	($ - reg_addresses) / 8
+reg_strings:
+reg_rax		db	'rax=',0
+reg_rbx		db	'rbx=',0
+reg_rcx		db	'rcx=',0
+reg_rdx		db	'rdx=',0
+reg_rsp		db	'rsp=',0
+reg_rbp		db	'rbp=',0
+reg_rsi		db	'rsi=',0
+reg_rdi		db	'rdi=',0
+reg_r8		db	'r8=',0
+reg_r9		db	'r9=',0
+reg_r10		db	'r10=',0
+reg_r11		db	'r11=',0
+reg_r12		db	'r12=',0
+reg_r13		db	'r13=',0
+reg_r14		db	'r14=',0
+reg_r15		db	'r15=',0
+reg_rip		db	'rip=',0
+reg_rflags	db	'rflags=',0
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+; this buffer is allocated statically = has certain unchangeable static size
+
+align 16
+buf		rb	16
+		rb	2

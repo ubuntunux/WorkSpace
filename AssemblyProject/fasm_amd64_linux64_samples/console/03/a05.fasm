@@ -1,0 +1,125 @@
+; fasm demonstration of sys_fork, sys_nanosleep
+; method, how to make Linux user be calm when waiting for a long-time procedure
+; compiled with fasm 1.66
+
+include '../../include/linux_def.inc'		; linux constants
+include '../../include/linux_struc.inc'		; linux structures
+include '../../include/unistd64.inc'		; syscall numbers
+include '../../include/macro_align_pad.inc'	; macros for align and pad
+
+format ELF64 executable at 0000000100000000h
+
+segment readable executable
+
+entry $
+
+	mov	eax,sys_fork
+	syscall
+; return negative value when error
+; return 0 for child thread
+; return PID of child for parent
+	lea	r11,[msg00]
+	or	rax,rax
+	js	error_msg_exit
+	jnz	parent_thread
+
+child_thread:
+	mov	ebx,msg_calm_nums - 1
+
+AMDPad16
+child_loop:
+	lea	rax,[msg_calm]
+	mov	edx,2			; write 2 chars
+	lea	rsi,[rax+rbx*2]
+	mov	edi,STDOUT
+	mov	eax,sys_write
+	syscall
+	mov	eax,msg_calm_nums - 1
+	dec	ebx
+	cmovs	ebx,eax
+
+virtual at 0
+time		timespec	; structure from included linux_struc.inc file
+end virtual
+	xor	esi,esi
+	lea	rdi,[timespec_child]
+	mov	[rdi + time.tv_sec],0
+	mov	[rdi + time.tv_nsec],500000000
+	mov	eax,sys_nanosleep
+	syscall
+	jmp	child_loop
+
+parent_thread:
+	mov	r12,rax			; save child PID
+
+; put some time-expensive procedures here
+; in this demo it is replaced by simple nanosleep
+	lea	rsi,[timespec_remain]
+	lea	rdi,[timespec_wait]
+	mov	qword [rdi + time.tv_sec],7		; 7 seconds
+	mov	qword [rdi + time.tv_nsec],500000000	; nanoseconds
+	mov	eax,sys_nanosleep	; see: man nanosleep
+	syscall
+
+; kill the child by sending SIGKILL signal to it
+	mov	esi,SIGKILL
+	mov	rdi,r12		; you can use rdi=0, rdi=-1, see manuals
+	mov	eax,sys_kill	; see /usr/share/man/man2/kill.2.gz
+	syscall
+
+; wait until child die
+	xor	r10,r10
+	xor	edx,edx
+	lea	rsi,[process_status]
+	mov	rdi,r12
+	mov	eax,sys_wait4	; see: man wait4
+	syscall
+
+	mov	rax,qword [process_status]
+	lea	r11,[msg01]
+	cmp	ax,00h shl 8 + SIGKILL
+	jnz	error_msg_exit
+
+exit0:	xor	edi,edi		; exit code 0
+exit:	mov	eax,sys_exit
+	syscall
+
+error_msg_exit:
+	lea	rax,[r11]
+	call	wzts_std
+
+exit1:	mov	edi,1		; exit code
+	jmp	exit
+
+
+align 16
+include '../../include/dzts64.inc'	; routine for write string to STDOUT
+
+padnum16zero				; macro from included macros file
+
+segment readable writeable
+
+msg_calm	db	'/',8		; 8 is backspace
+		db	'|',8
+		db	'\',8
+		db	'-',8
+msg_calm_nums	=	($ - msg_calm) / 2
+
+msg00		db	'Error when sys_fork!',0Ah,7,0
+msg01		db	'Something went wrong when waiting to child '
+		db	'process death!',0Ah,7,0	; 7 is beep (bell)
+
+padnum16dummy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; uninitialised-data
+
+align 16
+timespec_wait	timespec	; structure from included linux_struc.inc file
+align 16
+timespec_remain	timespec
+align 16
+timespec_child	timespec
+align 16
+process_status	rq	1
