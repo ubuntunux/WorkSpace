@@ -35,7 +35,7 @@ texUnitUniform = None
 
 def loadTexture(path):
     img = Image.open(path).transpose(Image.FLIP_TOP_BOTTOM)
-    img_data = numpy.fromstring(img.tostring(), numpy.uint8)
+    img_data = numpy.fromstring(img.tobytes(), numpy.uint8)
     width, height = img.size
 
     # glTexImage2D expects the first element of the image data to be the
@@ -122,7 +122,7 @@ void main()
         ctypes.c_void_p(12))
 
     # load texture and assign texture unit for shaders
-    sampleTexture = loadTexture('hazard.png')
+    sampleTexture = loadTexture('resources/hello.bmp')
     texUnitUniform = GL.glGetUniformLocation(shaderProgram, 'texUnit')
 
     # Finished
