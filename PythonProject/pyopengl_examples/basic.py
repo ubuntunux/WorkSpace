@@ -1,5 +1,5 @@
 import os
-import ctypes
+from ctypes import c_void_p
 
 import numpy as np
 
@@ -101,26 +101,9 @@ def Run():
     positions = np.array([(-1, 1, 0), (-1, -1, 0), (1, -1, 0), (1, 1, 0)], dtype=np.float32)
     texcoords = np.array([(0, 1), (0, 0), (1, 0), (1, 1)], dtype=np.float32)
     indices = np.array([0, 1, 2, 0, 2, 3], dtype=np.uint32)
-    vertex_datas = [positions, texcoords]
-
-    vertex_buffer_size = 0
-    vertex_strides = []
-    vertex_stride_points = []
-
-    for data in vertex_datas:
-        stride = len(data[0]) if len(data) > 0 else 0
-        vertex_strides.append(stride)
-        vertex_stride_points.append(ctypes.c_void_p(vertex_buffer_size))
-        vertex_buffer_size += stride * np.nbytes[dtype]
-    vertex_stride_range = range(len(vertex_strides))
-
-    print("vertex_buffer_size", vertex_buffer_size)
-    print("vertex_strides", vertex_strides)
-    print("vertex_stride_points", vertex_stride_points)
-    print("vertex_stride_range", vertex_stride_range)
 
     # data serialize
-    vertex_datas = np.hstack(vertex_datas).astype(dtype)
+    vertex_datas = np.hstack([positions, texcoords]).astype(dtype)
 
     # crate vertex array
     vertex_array = glGenVertexArrays(1)
@@ -203,10 +186,22 @@ def Run():
         # Bind Vertex Array
         glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer)
 
-        for layout_location in vertex_stride_range:
-            glEnableVertexAttribArray(layout_location)
-            glVertexAttribPointer(layout_location, vertex_strides[layout_location], GL_FLOAT, GL_FALSE,
-                                  vertex_buffer_size, vertex_stride_points[layout_location])
+        vertex_position_size = positions[0].nbytes
+        vertex_texcoord_size = texcoords[0].nbytes
+        vertex_buffer_size = vertex_position_size + vertex_texcoord_size
+
+        location = 0
+        offset = 0
+        stride = len(positions[0])
+        glEnableVertexAttribArray(location)
+        glVertexAttribPointer(location, stride, GL_FLOAT, GL_FALSE, vertex_buffer_size, c_void_p(offset))
+
+        location = 1
+        offset += vertex_position_size
+        stride = len(positions[0])
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(location, stride, GL_FLOAT, GL_FALSE, vertex_buffer_size, c_void_p(offset))
+
 
         # bind index buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer)
