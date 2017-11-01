@@ -198,7 +198,7 @@ def Run():
 
         location = 1
         offset += vertex_position_size
-        stride = len(positions[0])
+        stride = len(texcoords[0])
         glEnableVertexAttribArray(1)
         glVertexAttribPointer(location, stride, GL_FLOAT, GL_FALSE, vertex_buffer_size, c_void_p(offset))
 
