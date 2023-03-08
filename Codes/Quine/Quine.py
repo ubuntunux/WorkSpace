@@ -1,0 +1,1 @@
+var='var=%r;print(var%%var)';print(var%var)

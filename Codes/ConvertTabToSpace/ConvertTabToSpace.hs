@@ -1,0 +1,16 @@
+import System.Environment
+import Control.Monad
+
+
+tabToSpace line =
+	case line of
+		'\t':xs -> "    " ++ (tabToSpace xs)
+		otherwise -> line
+
+main = do
+	inputFile <- getArgs
+	let filename = if inputFile == [] then "example.txt" else inputFile !! 0
+	contents <- readFile filename
+	let result = unlines $ fmap (tabToSpace) (lines contents)
+	writeFile ("New_" ++ filename) result
+		

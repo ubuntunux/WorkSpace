@@ -1,0 +1,1 @@
+sum $ map (\n->foldr (\x acc->if x == '8' then acc + 1 else acc) 0 (show n)) [1..10000]

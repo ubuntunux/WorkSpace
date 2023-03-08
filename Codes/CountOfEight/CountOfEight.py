@@ -1,0 +1,1 @@
+print(sum([str(i).count('8') for i in range(1,10001)]))

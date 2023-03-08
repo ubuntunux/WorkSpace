@@ -1,0 +1,201 @@
+1 Quine
+	Python(1) : Quine.py
+	Haskell(1) : Quine.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+2 CountingCodeLines
+	Python(1) : CountingCodeLines.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+3 SelfNumbers
+	Python(1) : SelfNumbers.py
+	Haskell(1) : SelfNumbers.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+4 CountOfEight
+	Python(1) : CountOfEight.py
+	Haskell(1) : CountOfEight.hs
+	Go(0) : 
+	C++(1) : CountOfEight.cpp
+	Julia(0) : 
+	C(0) : 
+
+5 Debug
+	Python(0) : 
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+6 PrimaryArithmetic
+	Python(1) : PrimaryArithmetic.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+7 FindFile
+	Python(1) : FindFile.py
+	Haskell(1) : FindFile.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+8 ListCycle
+	Python(1) : ListCycle.py
+	Haskell(1) : ListCycle.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+9 Slurpy
+	Python(1) : Slurpy.py
+	Haskell(1) : Slurpy.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+10 VersionCompare
+	Python(1) : VersionCompare.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+11 EightQueensProblem
+	Python(1) : EightQueensProblem.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+12 Palindrome
+	Python(1) : Palindrome.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+13 TapToSpace
+	Python(1) : example.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+14 LCDDisplay
+	Python(1) : LCDDisplay.py
+	Haskell(1) : LCDDisplay.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+15 JiggleBone
+	Python(0) : 
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+16 Multiples
+	Python(1) : Multiples.py
+	Haskell(1) : Multiples.hs
+	Go(0) : 
+	C++(1) : Multiples.cpp
+	Julia(0) : 
+	C(0) : 
+
+17 InsertComma
+	Python(1) : InsertComma.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+18 HappyNumber
+	Python(1) : HappyNumber.py
+	Haskell(1) : HappyNumber.hs
+	Go(1) : HappyNumber.go
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+19 CommonString
+	Python(1) : CommonString.py
+	Haskell(1) : CommonString.hs
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+20 SpriralArray
+	Python(1) : SpiralArray.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+21 TugOfWar
+	Python(1) : TugOfWar.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+22 RectArea
+	Python(1) : RectArea.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+23 CheckTheMaze
+	Python(1) : CheckTheMaze.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+24 ConvertEncoding
+	Python(1) : convertEncoding.py
+	Haskell(0) : 
+	Go(0) : 
+	C++(0) : 
+	Julia(0) : 
+	C(0) : 
+
+========================================
+Total resolved info
+========================================
+	Python : 22 solved
+	Haskell : 10 solved
+	Go : 1 solved
+	C++ : 2 solved
+	Julia : 0 solved
+	C : 0 solved

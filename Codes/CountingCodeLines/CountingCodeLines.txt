@@ -1,0 +1,31 @@
+출처 : http://codingdojang.com/scode/399
+
+출처 : http://codekata.com/kata/kata13-counting-code-lines
+
+자바(Java) 프로그램 소스의 코드라인을 구하는 문제.
+
+주석을 제외한 실제 코드의 라인수만을 카운팅 해야 한다.
+
+다음 소스의 코드라인은 3이 될 것이다.
+
+// This file contains 3 lines of code
+public interface Dave {
+    /**
+     * count the number of lines in a file
+     */
+    int countLines(File inFile); // not the real signature!
+}
+다음 소스의 코드라인은 5가 될 것이다.
+
+/*****
+ * This is a test program with 5 lines of code
+ *  \/* no nesting allowed!
+
+//*****//***/// Slightly pathological comment ending...
+public class Hello {
+    public static final void main(String [] args) { // gotta love Java
+        // Say hello
+        System./*wait*/out./*for*/println/*it*/("Hello/*");
+    }
+}
+위와 같이 자바소스코드의 실제 라인수만을 카운팅하는 프로그램을 작성하시오.
